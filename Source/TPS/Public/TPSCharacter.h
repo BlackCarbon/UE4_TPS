@@ -9,6 +9,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class UTPSHealthComponent;
 
 UCLASS()
 class TPS_API ATPSCharacter : public ACharacter
@@ -39,6 +40,14 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		USpringArmComponent * SpringArmComp;
+
+	UTPSHealthComponent *HealthComp;
+
+	UFUNCTION()
+		void OnMyHealthChanged(UTPSHealthComponent* MyHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UPROPERTY(BlueprintReadOnly, Category = "Player")
+		bool bDied;
 
 public:	
 	// Called every frame

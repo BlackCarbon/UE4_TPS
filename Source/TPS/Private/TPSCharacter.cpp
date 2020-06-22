@@ -5,6 +5,9 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Components/TPSHealthComponent.h"
+#include "..\Public\TPSCharacter.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ATPSCharacter::ATPSCharacter()
@@ -21,6 +24,8 @@ ATPSCharacter::ATPSCharacter()
 
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
 
+	HealthComp = CreateDefaultSubobject<UTPSHealthComponent>(TEXT("HealthComp"));
+
 }
 
 // Called when the game starts or when spawned
@@ -28,6 +33,9 @@ void ATPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	
+	HealthComp->OnHealthChanged.AddDynamic(this, &ATPSCharacter::OnMyHealthChanged);
+
 }
 
 void ATPSCharacter::MoveForward(float Val)
@@ -51,6 +59,23 @@ void ATPSCharacter::EndCrouch()
 {
 	UE_LOG(LogTemp, Warning, TEXT("End Crouch!"));
 	UnCrouch();
+}
+
+void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float Health, float HealthDelta, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
+{
+	if (Health <= 0.0f && !bDied)
+	{
+
+		bDied = true;
+
+		GetMovementComponent()->StopMovementImmediately();
+
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		DetachFromControllerPendingDestroy();
+
+		SetLifeSpan(10.0f);
+	}
 }
 
 // Called every frame
