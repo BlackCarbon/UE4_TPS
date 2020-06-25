@@ -18,6 +18,7 @@ public:
 	// Sets default values for this component's properties
 	UTPSHealthComponent();
 
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -37,4 +38,10 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnHealthChangedSignature OnHealthChanged;
 		
+	UFUNCTION(BlueprintCallable, Category = "HealthComponent")
+		float GetHealth()
+	{
+		return Health;
+	}
+
 };
