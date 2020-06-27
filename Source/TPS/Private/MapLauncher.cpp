@@ -26,6 +26,7 @@ void UMapLauncher::BeginPlay()
 	// ...
 	 
 }
+
 // Called every frame
 void UMapLauncher::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
