@@ -9,6 +9,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class UTPSHealthComponent;
 
 UCLASS()
 class TPS_API ATPSCharacter : public ACharacter
@@ -40,6 +41,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		USpringArmComponent * SpringArmComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		UTPSHealthComponent * HealthComp;
+
+	UFUNCTION()
+		void OnMyHealthChanged(UTPSHealthComponent* MyHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Player")
+		bool bDied;
+
+
+
 	// Gun muzzle's offset from the camera location.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		FVector MuzzleOffset;
@@ -48,7 +60,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 		TSubclassOf<class ATPS_Projectile> ProjectileClass;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
