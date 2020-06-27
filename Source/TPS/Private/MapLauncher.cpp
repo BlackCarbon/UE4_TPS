@@ -53,7 +53,19 @@ void UMapLauncher::InitializeMap() {
 
 
 void UMapLauncher::CreateStone(FVector pos){
-	//Ԥ����Ҫ����PositionTranslator��HEIGHT��EDGEWEIGHT���������ƽ������
+	if (GetWorld())
+	{
+		UClass* BlueprintVar = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/Blueprints/BP_stone"));
+		if (BlueprintVar != nullptr)
+		{
+
+			AActor* pMyActor = GetWorld()->SpawnActor<AActor>(BlueprintVar);
+			if (pMyActor)
+			{
+				pMyActor->SetActorLocation(pos);
+			}
+		}
+	}
 
 }
 
