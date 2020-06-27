@@ -8,6 +8,7 @@
 #include "TPS_Projectile.h"
 #include "Components/TPSHealthComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ATPSCharacter::ATPSCharacter()
@@ -128,3 +129,9 @@ void ATPSCharacter::Fire()
 		}
 }
 
+void ATPSCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATPSCharacter, bDied);
+}
