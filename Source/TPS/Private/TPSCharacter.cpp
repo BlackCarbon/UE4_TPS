@@ -6,7 +6,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "TPS_Projectile.h"
-
+#include "Components/TPSHealthComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ATPSCharacter::ATPSCharacter()
@@ -22,6 +23,8 @@ ATPSCharacter::ATPSCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
+	
+	HealthComp = CreateDefaultSubobject<UTPSHealthComponent>(TEXT("HealthComp"));
 
 }
 
@@ -29,6 +32,11 @@ ATPSCharacter::ATPSCharacter()
 void ATPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+
+
+	HealthComp->OnHealthChanged.AddDynamic(this, &ATPSCharacter::OnMyHealthChanged);
+
 	
 }
 
@@ -54,6 +62,24 @@ void ATPSCharacter::EndCrouch()
 	UE_LOG(LogTemp, Warning, TEXT("End Crouch!"));
 	UnCrouch();
 }
+
+void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float Health, float HealthDelta, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
+{
+	if (Health <= 0.0f && !bDied)
+	{
+
+		bDied = true;
+
+		GetMovementComponent()->StopMovementImmediately();
+
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		DetachFromControllerPendingDestroy();
+
+		SetLifeSpan(10.0f);
+	}
+}
+
 
 // Called every frame
 void ATPSCharacter::Tick(float DeltaTime)
@@ -101,3 +127,4 @@ void ATPSCharacter::Fire()
 
 		}
 }
+
