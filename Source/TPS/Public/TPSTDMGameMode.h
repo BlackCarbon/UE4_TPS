@@ -39,4 +39,10 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "GameMode")
 		FOnActorKilled OnActorKilled;
 
+protected:
+
+	void AssignNewTeamId();
+
+	void Tick(float DeltaSeconds) override;
+
 };

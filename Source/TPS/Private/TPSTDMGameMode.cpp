@@ -3,21 +3,25 @@
 
 #include "TPSTDMGameMode.h"
 #include "TPSPlayerState.h"
+#include "TPSGameState.h"
 
 
 
 
 ATPSTDMGameMode::ATPSTDMGameMode()
 {
-
 	PlayerStateClass = ATPSPlayerState::StaticClass();
+	GameStateClass = ATPSGameState::StaticClass();
 
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.TickInterval = 0.15f;
 
 }
 
 void ATPSTDMGameMode::StartPlay()
 {
 	Super::StartPlay();
+
 
 }
 
@@ -43,6 +47,35 @@ void ATPSTDMGameMode::RespawnPlayer(AController * Controller, float InTime)
 	FTimerHandle uselessHandler;
 	FTimerDelegate func = FTimerDelegate::CreateLambda([=]() { RespawnPlayer(Controller); });
 	GetWorldTimerManager().SetTimer(uselessHandler, func, InTime, false);
+}
+
+
+
+
+
+void ATPSTDMGameMode::AssignNewTeamId()
+{
+	auto World = GetWorld();
+	auto GS = GetGameState<ATPSGameState>();
+	if (World && GS)
+	{
+		for (auto It = World->GetPlayerControllerIterator(); It; ++It)
+		{
+			auto PC = It->Get();
+			if (!GS->playerList.Contains(PC))
+			{
+				GS->AddNewPlayer(PC, PC->GetPlayerState<ATPSPlayerState>()->GetPlayerId);
+				// @TODO;
+			}
+		}
+	}
+		
+
+}
+
+void ATPSTDMGameMode::Tick(float DeltaSeconds)
+{
+	AssignNewTeamId();
 }
 
 void ATPSTDMGameMode::GameOver()

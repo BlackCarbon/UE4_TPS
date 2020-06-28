@@ -7,5 +7,6 @@
 
 void ATPSPlayerState::IncreaseScore(float DeltaScore)
 {
-	Score += DeltaScore;
+	SetScore(GetScore() + DeltaScore);
 }
+

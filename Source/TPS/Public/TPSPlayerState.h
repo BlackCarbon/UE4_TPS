@@ -19,5 +19,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerState")
 		void IncreaseScore(float DeltaScore);
 
+protected:
+
 	
 };
