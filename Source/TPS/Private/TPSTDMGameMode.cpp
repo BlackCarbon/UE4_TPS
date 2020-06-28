@@ -2,4 +2,23 @@
 
 
 #include "TPSTDMGameMode.h"
+#include "TPSPlayerState.h"
+
+
+
+
+ATPSTDMGameMode::ATPSTDMGameMode()
+{
+
+	PlayerStateClass = ATPSPlayerState::StaticClass();
+
+
+}
+
+
+void ATPSTDMGameMode::GameOver()
+{
+	// @TODO Finish up the match
+}
+
 

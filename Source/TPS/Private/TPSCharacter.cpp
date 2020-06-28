@@ -66,7 +66,7 @@ void ATPSCharacter::EndCrouch()
 
 void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float Health, float HealthDelta, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
 {
-	if (Health <= 0.0f && !bDied)
+	if (Health < 1.0f && !bDied)
 	{
 
 		bDied = true;
