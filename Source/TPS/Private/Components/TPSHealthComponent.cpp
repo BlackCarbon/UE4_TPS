@@ -50,6 +50,8 @@ void UTPSHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage
 
 	UE_LOG(LogTemp, Log, TEXT("Health Changed: %s"), *FString::SanitizeFloat(Health));
 
+	int isKong = InstigatedBy == nullptr;
+	UE_LOG(LogTemp, Log, TEXT("Is InstigatedBy null? : %d"), isKong);
 
 
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);

@@ -29,6 +29,7 @@ public:
 
 	ATPSTDMGameMode();
 
+	void StartPlay() override;
 
 
 	void RespawnPlayer(AController * Controller, float InTime);
