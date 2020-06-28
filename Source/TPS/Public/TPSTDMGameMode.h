@@ -28,7 +28,11 @@ protected:
 public:
 
 	ATPSTDMGameMode();
-	
+
+
+	void RespawnPlayer(APlayerController * Controller);
+
+	void RespawnPlayer(APlayerController * Controller, float InTime);
 
 	UPROPERTY(BlueprintAssignable, Category = "GameMode")
 		FOnActorKilled OnActorKilled;

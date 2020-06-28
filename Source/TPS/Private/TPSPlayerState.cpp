@@ -3,7 +3,9 @@
 
 #include "TPSPlayerState.h"
 
-void ATPSPlayerState::AddScore(float DeltaScore)
+
+
+void ATPSPlayerState::IncreaseScore(float DeltaScore)
 {
 	Score += DeltaScore;
 }
