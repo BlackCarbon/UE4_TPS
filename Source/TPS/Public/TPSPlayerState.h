@@ -17,7 +17,7 @@ class TPS_API ATPSPlayerState : public APlayerState
 public:
 
 	UFUNCTION(BlueprintCallable,Category = "PlayerState")
-	void AddScore(float DeltaScore);
+	void IncreaseScore(float DeltaScore);
 	
 	
 };

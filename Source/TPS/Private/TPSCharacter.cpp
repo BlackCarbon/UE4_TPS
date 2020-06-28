@@ -9,6 +9,7 @@
 #include "Components/TPSHealthComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "TPSTDMGameMode.h"
 
 // Sets default values
 ATPSCharacter::ATPSCharacter()
@@ -71,13 +72,28 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 
 		bDied = true;
 
+		if (HasAuthority())
+		{
+			UE_LOG(LogTemp, Log, TEXT("Respawning !"));
+			ATPSTDMGameMode *GM = Cast<ATPSTDMGameMode>(GetWorld()->GetAuthGameMode());
+			if (GM)
+			{
+				UE_LOG(LogTemp, Log, TEXT("Really Respawning !"));
+				GM->RespawnPlayer(GetController(), 5.0f);
+			}
+		}
+
+		SetLifeSpan(10.0f);
+
 		GetMovementComponent()->StopMovementImmediately();
 
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 		DetachFromControllerPendingDestroy();
 
-		SetLifeSpan(10.0f);
+
+		
+
 	}
 }
 
