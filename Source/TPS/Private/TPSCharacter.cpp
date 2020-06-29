@@ -9,6 +9,7 @@
 #include "Components/TPSHealthComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "TPSTDMGameMode.h"
 
 // Sets default values
 ATPSCharacter::ATPSCharacter()
@@ -66,10 +67,23 @@ void ATPSCharacter::EndCrouch()
 
 void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float Health, float HealthDelta, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
 {
-	if (Health <= 0.0f && !bDied)
+	if (Health < 1.0f && !bDied)
 	{
 
 		bDied = true;
+
+		if (HasAuthority())
+		{
+			UE_LOG(LogTemp, Log, TEXT("Respawning !"));
+			ATPSTDMGameMode *GM = Cast<ATPSTDMGameMode>(GetWorld()->GetAuthGameMode());
+			if (GM)
+			{
+				UE_LOG(LogTemp, Log, TEXT("Really Respawning !"));
+				GM->RespawnPlayer(GetController(), 5.0f);
+			}
+		}
+
+		SetLifeSpan(10.0f);
 
 		GetMovementComponent()->StopMovementImmediately();
 
@@ -77,7 +91,9 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 
 		DetachFromControllerPendingDestroy();
 
-		SetLifeSpan(10.0f);
+
+		
+
 	}
 }
 
@@ -110,9 +126,9 @@ void ATPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ATPSCharacter::Fire()
 {
-   //Fire 的实验函数
-	if(ProjectileClass)
-		{
+	//Fire 的实验函数
+	if (ProjectileClass)
+	{
 
 		FVector CameraLocation;
 		FRotator CameraRotation;
@@ -123,10 +139,13 @@ void ATPSCharacter::Fire()
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = this;
+
 
 		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, CameraRotation, SpawnParams);
 
-		}
+	}
 }
 
 void ATPSCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const

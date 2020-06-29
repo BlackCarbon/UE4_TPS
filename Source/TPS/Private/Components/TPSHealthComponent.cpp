@@ -3,11 +3,18 @@
 
 #include "Components\TPSHealthComponent.h"
 #include "Net\UnrealNetwork.h"
+#include "TPSTDMGameMode.h"
+#include <TPSCharacter.h>
+#include <TPSPlayerState.h>
+#include <TPSGameState.h>
+#define FOX_DEBUG
 
 // Sets default values for this component's properties
 UTPSHealthComponent::UTPSHealthComponent()
 {
 	MaxHealth = 100.0f;
+
+	bIsDied = false;
 
 	SetIsReplicated(true);
 }
@@ -33,16 +40,68 @@ void UTPSHealthComponent::BeginPlay()
 
 void UTPSHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
-	if (Damage <= 0.0f)
+	if (Damage <= 0.0f || bIsDied)
 	{
 		return;
 	}
 
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
 	
+	if (Health < 1.0f)
+	{
+		bIsDied = true;
+	}
+
 	UE_LOG(LogTemp, Log, TEXT("Health Changed: %s"), *FString::SanitizeFloat(Health));
 
+#ifdef FOX_DEBUG
+	auto a1 = Cast<ATPSCharacter>(GetOwner());
+	auto a2 = InstigatedBy;
+	int ID1=-1, ID2=-1;
+	int teamID1 = -1, teamID2 = -1;
+	if (a1)
+	{
+		auto Cont = a1->GetController();
+		if (Cont && Cont->GetPlayerState<ATPSPlayerState>())
+		{
+			ID1 = Cont->GetPlayerState<ATPSPlayerState>()->GetPlayerId();
+
+		}
+	}
+
+	if (a2)
+	{
+		if (a2->GetPlayerState<ATPSPlayerState>())
+		{
+			ID2 = a2->GetPlayerState<ATPSPlayerState>()->GetPlayerId();
+		}
+	}
+	auto world = GetWorld();
+	ATPSGameState *GS = nullptr;
+	if (world)
+	{
+		GS = world->GetGameState<ATPSGameState>();
+	}
+	if (GS)
+	{
+		teamID1 = GS->GetTeamState(ID1);
+		teamID2 = GS->GetTeamState(ID2);
+	}
+
+
+	UE_LOG(LogTemp, Log, TEXT("%d Hit %d!,(TEAM: %d , %d)"), ID2, ID1, teamID2, teamID1);
+#endif
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
+
+	if (bIsDied)
+	{
+		ATPSTDMGameMode* GM = Cast<ATPSTDMGameMode>(GetWorld()->GetAuthGameMode());
+		if (GM)
+		{
+			GM->OnActorKilled.Broadcast(GetOwner(), DamageCauser, InstigatedBy);
+		}
+	}
+
 }
 
 
