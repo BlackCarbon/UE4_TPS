@@ -64,7 +64,11 @@ void ATPSTDMGameMode::AssignNewTeamId()
 			auto PC = It->Get();
 			if (!GS->playerList.Contains(PC))
 			{
-				GS->AddNewPlayer(PC, PC->GetPlayerState<ATPSPlayerState>()->GetPlayerId);
+				auto PS = PC->GetPlayerState<ATPSPlayerState>();
+				if (PS)
+				{
+					GS->AddNewPlayer(PC, PS->GetPlayerId());
+				}
 				// @TODO;
 			}
 		}

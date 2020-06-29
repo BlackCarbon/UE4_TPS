@@ -14,56 +14,82 @@ using namespace std;
 #include "Components/ActorComponent.h"
 #include "MapLauncher.generated.h"
 
+/*static class PositionTranslator {
+public:
+	static F HEIGHT;
+	static F EDGEWIDTH;
 
-
+	static FVector transFromDispersedToContinuous(FIntVector p) {
+		FVector ans;
+		ans.Z = p.Z * HEIGHT + HEIGHT / 2.0;
+		ans.Y = (p.Y - 0.5 * (p.X & 1)) * sqrt(3) * EDGEWIDTH;
+		ans.X = p.X * 1.5 * EDGEWIDTH;
+		return ans;
+	}
+	static void init(FIntVector size) {
+		HEIGHT = size.Z;
+		EDGEWIDTH = size.X;
+	}
+};
+*/
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPS_API UMapLauncher : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
+
+	static UMapLauncher* getInstance() {
+		return instance;
+	}
+
+	FVector transFromDispersedToContinuous(FIntVector p);
+
 	// Sets default values for this component's properties
 	UMapLauncher();
+
+	UPROPERTY(EditDefaultsOnly,Category="块大小")
+	int BlockSize;
+
+	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
+	FIntVector MapSize;
+		
+	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
+	FIntVector StoneScale;
+
+//	PositionTranslator * PosTrans;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	static UMapLauncher * instance;
+	
 	void InitializeMap();
-	void CreateStone(FVector pos);
 
-public:	
+
+
+public:		
+//	template<UCLASS T>
+	//void CreateStone<T>(FIntVector pos);
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	
 	class MapProductor
 	{
 	public:
-		template<typename T>
-		struct Point {
-			T x, y, z;
-		};
 
 
 
-		class PositionTranslator {
-		private:
-			constexpr static F HEIGHT = 1.0;
-			constexpr static F EDGEWEIGHT = 1.0;
-		public:
-
-
-			Point<F> transFromDispersedToContinuous(Point<int> p) {
-				Point<F>ans;
-				ans.z = p.z * HEIGHT + HEIGHT / 2.0;
-				ans.y = (p.y - 0.5 * (p.x & 1)) * sqrt(3) * EDGEWEIGHT;
-				ans.x = p.x * 1.5 * EDGEWEIGHT;
-				return ans;
-			}
-		};
-		constexpr static pair<int, int>BLOCK_SIZE = mk(4, 4);
-		constexpr static pair<int, int>MAP_SIZE = mk(4, 4);
-		constexpr static int MAP_HEIGHT = 16;//��ͼ�߶�,��stone�߶�Ϊ��λ
+	
+		int BLOCK_SIZE =4;
+		 pair<int, int>MAP_SIZE = mk(4, 4);
+		int MAP_HEIGHT = 16;
+		MapProductor(int bsize,FIntVector size) {
+			BLOCK_SIZE = bsize;
+			MAP_SIZE = mk(size.X, size.Y);
+			MAP_HEIGHT = size.Z;
+		 }
 		class Perlin {
 		public:
 			float persistence;
@@ -133,7 +159,7 @@ public:
 		};
 		vector<vector<int>> getMap(int seed) {
 			Perlin P(seed);
-			pair<int, int>size = mk(BLOCK_SIZE.first * MAP_SIZE.first, BLOCK_SIZE.second * MAP_SIZE.second);
+			pair<int, int>size = mk(BLOCK_SIZE * MAP_SIZE.first, BLOCK_SIZE * MAP_SIZE.second);
 			vector<vector<double>>v(size.first, vector<double>(size.second));
 			vector<vector<int>>map(size.first, vector<int>(size.second));
 			double mx = -1e9, mn = 1e9;
@@ -160,6 +186,7 @@ public:
 
 		
 };
+UMapLauncher* UMapLauncher::instance = nullptr;
 #undef F
 #undef mk
 

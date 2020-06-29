@@ -25,17 +25,24 @@ public:
 
 	//玩家列表
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameState")
-		TArray<AController*> playerList;
+		TMap<AController*,int> playerList;
 
 	//储存着队伍信息
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "GameState")
 		TMap<int,int> TeamStates;
 
 
-	//返回该玩家的队伍，为注册的则返回0
+	//返回该玩家的队伍，未注册的则返回0
 	UFUNCTION(BlueprintCallable, Category = "GameState")
 		int GetTeamState(int playerIndex);
 
+	//返回该玩家的队伍，未注册的则返回0
+	UFUNCTION(BlueprintCallable, Category = "GameState")
+		int GetTeamStateByActor(AActor *player);
+
+	//返回该玩家的队伍，未注册的则返回0
+	UFUNCTION(BlueprintCallable, Category = "GameState")
+		int GetTeamStateByController(AController *player);
 
 	//返回该队伍的成员数
 	UFUNCTION(BlueprintCallable, Category = "GameState")

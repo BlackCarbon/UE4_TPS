@@ -83,7 +83,7 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 			}
 		}
 
-		SetLifeSpan(10.0f);
+		SetLifeSpan(5.0f);
 
 		GetMovementComponent()->StopMovementImmediately();
 
