@@ -14,14 +14,37 @@ using namespace std;
 #include "Components/ActorComponent.h"
 #include "MapLauncher.generated.h"
 
+/*static class PositionTranslator {
+public:
+	static F HEIGHT;
+	static F EDGEWIDTH;
 
-
+	static FVector transFromDispersedToContinuous(FIntVector p) {
+		FVector ans;
+		ans.Z = p.Z * HEIGHT + HEIGHT / 2.0;
+		ans.Y = (p.Y - 0.5 * (p.X & 1)) * sqrt(3) * EDGEWIDTH;
+		ans.X = p.X * 1.5 * EDGEWIDTH;
+		return ans;
+	}
+	static void init(FIntVector size) {
+		HEIGHT = size.Z;
+		EDGEWIDTH = size.X;
+	}
+};
+*/
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPS_API UMapLauncher : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
+
+	static UMapLauncher* getInstance() {
+		return instance;
+	}
+
+	FVector transFromDispersedToContinuous(FIntVector p);
+
 	// Sets default values for this component's properties
 	UMapLauncher();
 
@@ -29,52 +52,36 @@ public:
 	int BlockSize;
 
 	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
-		FIntVector MapSize;
-
+	FIntVector MapSize;
+		
 	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
-		FIntVector StoneSize;
-	UPROPERTY(EditDefaultsOnly, Category = "砖块")
-	AActor *Stone;
+	FIntVector StoneScale;
+
+//	PositionTranslator * PosTrans;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	static UMapLauncher * instance;
+	
 	void InitializeMap();
-	void CreateStone(FVector pos);
 
-public:	
+
+
+public:		
+//	template<UCLASS T>
+	//void CreateStone<T>(FIntVector pos);
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	
 	class MapProductor
 	{
 	public:
-		template<typename T>
-		struct Point {
-			T x, y, z;
-		};
 
 
 
-		class PositionTranslator {
-		private:
-			 F HEIGHT = 1.0;
-			 F EDGEWEIGHT = 1.0;
-		public:
-
-			PositionTranslator(FIntVector size) {
-				HEIGHT = size.X;
-				EDGEWEIGHT = size.Y;
-			}
-			Point<F> transFromDispersedToContinuous(Point<int> p) {
-				Point<F>ans;
-				ans.z = p.z * HEIGHT + HEIGHT / 2.0;
-				ans.y = (p.y - 0.5 * (p.x & 1)) * sqrt(3) * EDGEWEIGHT;
-				ans.x = p.x * 1.5 * EDGEWEIGHT;
-				return ans;
-			}
-		};
+	
 		int BLOCK_SIZE =4;
 		 pair<int, int>MAP_SIZE = mk(4, 4);
 		int MAP_HEIGHT = 16;
@@ -179,6 +186,7 @@ public:
 
 		
 };
+UMapLauncher* UMapLauncher::instance = nullptr;
 #undef F
 #undef mk
 
