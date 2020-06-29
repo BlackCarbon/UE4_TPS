@@ -25,6 +25,17 @@ public:
 	// Sets default values for this component's properties
 	UMapLauncher();
 
+	UPROPERTY(EditDefaultsOnly,Category="块大小")
+	int BlockSize;
+
+	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
+		FIntVector MapSize;
+
+	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
+		FIntVector StoneSize;
+	UPROPERTY(EditDefaultsOnly, Category = "砖块")
+	AActor *Stone;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -48,11 +59,14 @@ public:
 
 		class PositionTranslator {
 		private:
-			constexpr static F HEIGHT = 1.0;
-			constexpr static F EDGEWEIGHT = 1.0;
+			 F HEIGHT = 1.0;
+			 F EDGEWEIGHT = 1.0;
 		public:
 
-
+			PositionTranslator(FIntVector size) {
+				HEIGHT = size.X;
+				EDGEWEIGHT = size.Y;
+			}
 			Point<F> transFromDispersedToContinuous(Point<int> p) {
 				Point<F>ans;
 				ans.z = p.z * HEIGHT + HEIGHT / 2.0;
@@ -61,9 +75,14 @@ public:
 				return ans;
 			}
 		};
-		constexpr static pair<int, int>BLOCK_SIZE = mk(4, 4);
-		constexpr static pair<int, int>MAP_SIZE = mk(4, 4);
-		constexpr static int MAP_HEIGHT = 16;//��ͼ�߶�,��stone�߶�Ϊ��λ
+		int BLOCK_SIZE =4;
+		 pair<int, int>MAP_SIZE = mk(4, 4);
+		int MAP_HEIGHT = 16;
+		MapProductor(int bsize,FIntVector size) {
+			BLOCK_SIZE = bsize;
+			MAP_SIZE = mk(size.X, size.Y);
+			MAP_HEIGHT = size.Z;
+		 }
 		class Perlin {
 		public:
 			float persistence;
@@ -133,7 +152,7 @@ public:
 		};
 		vector<vector<int>> getMap(int seed) {
 			Perlin P(seed);
-			pair<int, int>size = mk(BLOCK_SIZE.first * MAP_SIZE.first, BLOCK_SIZE.second * MAP_SIZE.second);
+			pair<int, int>size = mk(BLOCK_SIZE * MAP_SIZE.first, BLOCK_SIZE * MAP_SIZE.second);
 			vector<vector<double>>v(size.first, vector<double>(size.second));
 			vector<vector<int>>map(size.first, vector<int>(size.second));
 			double mx = -1e9, mn = 1e9;

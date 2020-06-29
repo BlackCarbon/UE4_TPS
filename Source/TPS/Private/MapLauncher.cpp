@@ -34,8 +34,8 @@ void UMapLauncher::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 
 void UMapLauncher::InitializeMap() {
-	auto map = MapProductor().getMap(1349880437);
-	MapProductor::PositionTranslator trans;
+	vector<vector<int>>map = MapProductor(BlockSize,MapSize).getMap(1349880437);
+	MapProductor::PositionTranslator trans(StoneSize);
 	for (int i = 0;i < map.size();i++) {
 		for (int j = 0;j < map[i].size();j++) {
 			for (int k = 0;k <= map[i][j];k++) {
@@ -53,19 +53,8 @@ void UMapLauncher::InitializeMap() {
 
 
 void UMapLauncher::CreateStone(FVector pos){
-	if (GetWorld())
-	{
-		UClass* BlueprintVar = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/Blueprints/BP_stone"));
-		if (BlueprintVar != nullptr)
-		{
 
-			AActor* pMyActor = GetWorld()->SpawnActor<AActor>(BlueprintVar);
-			if (pMyActor)
-			{
-				pMyActor->SetActorLocation(pos);
-			}
-		}
-	}
+//	AActor * stone= GetWorld()->SpawnActor<AActor::StaticClass()>(Stone,pos);
 
 }
 
