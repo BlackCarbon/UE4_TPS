@@ -5,6 +5,7 @@
 #include "Net\Unrealnetwork.h"
 #include <ctime>
 #include <utility>
+#include <TPSCharacter.h>
 
 ATPSGameState::ATPSGameState()
 {
@@ -33,6 +34,32 @@ int ATPSGameState::GetTeamState(int playerIndex)
 }
 
 
+int ATPSGameState::GetTeamStateByController(AController *player)
+{
+	if (playerList.Contains(player))
+		return GetTeamState(playerList[player]);
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Doesn't exist such player"));
+		return 0;
+	}
+
+}
+
+int ATPSGameState::GetTeamStateByActor(AActor * player)
+{
+	auto character = Cast<ATPSCharacter>(player);
+	if (character)
+	{
+		return GetTeamStateByController(character->GetController());
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Doesn't exist such player"));
+	return 0;
+}
+
+
+
+
 int ATPSGameState::TeamCount(int team)
 {
 	int cnt = 0;
@@ -49,7 +76,7 @@ int ATPSGameState::TeamCount(int team)
 
 void ATPSGameState::AddNewPlayer(AController* player,int playerId)
 {
-	playerList.Add(player);
+	playerList.Add(player, playerId);
 	int zerocnt = TeamCount(0);
 	int onecnt = TeamCount(1);
 	if (onecnt == zerocnt)
