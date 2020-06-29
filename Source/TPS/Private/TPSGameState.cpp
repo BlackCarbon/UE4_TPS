@@ -29,11 +29,6 @@ int ATPSGameState::GetTeamState(int playerIndex)
 		return 0;
 }
 
-int ATPSGameState::GetTeamStateByController(AController* Controller)
-{
-	return GetTeamState(GetPlayerIndex(Controller));
-}
-
 
 int ATPSGameState::TeamCount(int team)
 {
