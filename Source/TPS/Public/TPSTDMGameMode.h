@@ -29,6 +29,7 @@ public:
 
 	ATPSTDMGameMode();
 
+	void StartPlay() override;
 
 
 	void RespawnPlayer(AController * Controller, float InTime);
@@ -37,5 +38,11 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "GameMode")
 		FOnActorKilled OnActorKilled;
+
+protected:
+
+	void AssignNewTeamId();
+
+	void Tick(float DeltaSeconds) override;
 
 };
