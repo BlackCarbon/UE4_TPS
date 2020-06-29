@@ -26,7 +26,10 @@ int ATPSGameState::GetTeamState(int playerIndex)
 	if (TeamStates.Contains(playerIndex))
 		return TeamStates[playerIndex];
 	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Doesn't exist playerIndex : %d"), playerIndex);
 		return 0;
+	}
 }
 
 
