@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "TPSGameState.h"
 #include "TPSTDMGameMode.generated.h"
 
 
@@ -22,7 +23,23 @@ class TPS_API ATPSTDMGameMode : public AGameModeBase
 
 protected:
 
+	
+	void SetGameStatus(EGameStatus NewStatus);
+
+	EGameStatus QueryGameStatus();
+
+	void AssignNewTeamId();
+
+	void PreparingForGame();
+
+	void StartGame();
+
+	void EndGame();
+
 	void GameOver();
+
+	void Tick(float DeltaSeconds) override;
+
 
 
 public:
@@ -39,10 +56,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "GameMode")
 		FOnActorKilled OnActorKilled;
 
-protected:
 
-	void AssignNewTeamId();
-
-	void Tick(float DeltaSeconds) override;
 
 };

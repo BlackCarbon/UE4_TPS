@@ -14,6 +14,7 @@ ATPSGameState::ATPSGameState()
 		playerList.Empty();
 		srand(time(nullptr));
 	}
+	GameStatus = EGameStatus::Idle;
 
 	TeamStates.Empty();
 }
@@ -89,10 +90,14 @@ void ATPSGameState::AddNewPlayer(AController* player,int playerId)
 	}
 }
 
+void ATPSGameState::OnRep_GameStatus(EGameStatus OldStatus)
+{
+	OnGameStatusChanged(GameStatus, OldStatus);
+}
+
 void ATPSGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-
-	DOREPLIFETIME(ATPSGameState, TeamStates);
+	DOREPLIFETIME(ATPSGameState, GameStatus);
 }
