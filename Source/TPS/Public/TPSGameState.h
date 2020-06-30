@@ -9,6 +9,14 @@
 #include "TPSGameState.generated.h"
 
 
+UENUM(BlueprintType)
+enum class EGameStatus : uint8
+{
+	Idle,
+	PreparingGame,
+	InGame,
+	GameFinished
+};
 
 
 /**
@@ -28,8 +36,15 @@ public:
 		TMap<AController*,int> playerList;
 
 	//储存着队伍信息
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "GameState")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameState")
 		TMap<int,int> TeamStates;
+
+
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "GameState")
+		int TeamAScore;
+
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "GameState")
+		int TeamBScore;
 
 
 	//返回该玩家的队伍，未注册的则返回0
@@ -50,5 +65,17 @@ public:
 
 
 	void AddNewPlayer(AController* player,int playerId);
+
+	//对局状态
+	UPROPERTY(ReplicatedUsing=OnRep_GameStatus , BlueprintReadOnly, Category = "GameState")
+		EGameStatus GameStatus;
+
+protected:
+
+	UFUNCTION()
+		void OnRep_GameStatus(EGameStatus OldStatus);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameState")
+		void OnGameStatusChanged(EGameStatus NewStatus, EGameStatus OldStatus);
 
 };

@@ -78,6 +78,7 @@ void UTPSHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage
 	}
 	auto world = GetWorld();
 	ATPSGameState *GS = nullptr;
+	float teamAscore = -1, teamBscore = -1;
 	if (world)
 	{
 		GS = world->GetGameState<ATPSGameState>();
@@ -86,10 +87,11 @@ void UTPSHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage
 	{
 		teamID1 = GS->GetTeamState(ID1);
 		teamID2 = GS->GetTeamState(ID2);
+		teamAscore = GS->TeamAScore;
+		teamBscore = GS->TeamBScore;
 	}
 
-
-	UE_LOG(LogTemp, Log, TEXT("%d Hit %d!,(TEAM: %d , %d)"), ID2, ID1, teamID2, teamID1);
+	UE_LOG(LogTemp, Log, TEXT("%d Hit %d!,(TEAM: %d , %d), scored(0:%f  1:%f)"), ID2, ID1, teamID2, teamID1, teamAscore, teamBscore);
 #endif
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 

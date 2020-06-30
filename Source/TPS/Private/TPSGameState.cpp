@@ -14,7 +14,8 @@ ATPSGameState::ATPSGameState()
 		playerList.Empty();
 		srand(time(nullptr));
 	}
-
+	GameStatus = EGameStatus::Idle;
+	TeamAScore = TeamBScore = 0;
 	TeamStates.Empty();
 }
 
@@ -49,7 +50,7 @@ int ATPSGameState::GetTeamStateByController(AController *player)
 int ATPSGameState::GetTeamStateByActor(AActor * player)
 {
 	auto character = Cast<ATPSCharacter>(player);
-	if (character)
+	if (ensureAlways(character))
 	{
 		return GetTeamStateByController(character->GetController());
 	}
@@ -89,10 +90,16 @@ void ATPSGameState::AddNewPlayer(AController* player,int playerId)
 	}
 }
 
+void ATPSGameState::OnRep_GameStatus(EGameStatus OldStatus)
+{
+	OnGameStatusChanged(GameStatus, OldStatus);
+}
+
 void ATPSGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-
-	DOREPLIFETIME(ATPSGameState, TeamStates);
+	DOREPLIFETIME(ATPSGameState, GameStatus);
+	DOREPLIFETIME(ATPSGameState, TeamAScore);
+	DOREPLIFETIME(ATPSGameState, TeamBScore);
 }
