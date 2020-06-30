@@ -42,11 +42,13 @@ public:
 	static UMapLauncher* getInstance() {
 		return instance;
 	}
+	
 
 	FVector transFromDispersedToContinuous(FIntVector p);
 
 	// Sets default values for this component's properties
 	UMapLauncher();
+
 
 	UPROPERTY(EditDefaultsOnly,Category="块大小")
 	int BlockSize;
@@ -54,9 +56,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
 	FIntVector MapSize;
 		
-	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
+	UPROPERTY(EditDefaultsOnly, Category = "物体缩放")
 	FIntVector StoneScale;
 
+	//UPROPERTY(EditDefaultsOnly, Category = "初始缩放")
+	//static float OriginScale;
 //	PositionTranslator * PosTrans;
 
 protected:
@@ -187,6 +191,7 @@ public:
 		
 };
 UMapLauncher* UMapLauncher::instance = nullptr;
+//float UMapLauncher::OriginScale = 50;
 #undef F
 #undef mk
 
