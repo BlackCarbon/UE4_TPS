@@ -90,7 +90,7 @@ void ATPSTDMGameMode::AssignNewTeamId()
 		for (auto It = World->GetPlayerControllerIterator(); It; ++It)
 		{
 			auto PC = It->Get();
-			if (!GS->playerList.Contains(PC))
+			if (!GS->DoesPlayerAlreadyExist(PC))
 			{
 				auto PS = PC->GetPlayerState<ATPSPlayerState>();
 				if (PS)
