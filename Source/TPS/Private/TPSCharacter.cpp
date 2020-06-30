@@ -93,7 +93,7 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 				if (ensureAlways(GM) && ensureAlways(GS))
 				{
 					int Team1 = GS->GetTeamStateByController(InstigatedBy);
-					int Team0 = GS->GetTeamStateByActor(GetOwner());
+					int Team0 = GS->GetTeamStateByActor(this);
 					if (ensure(Team0 != Team1))
 					{
 						GM->AddTeamScore(Team1, 1.0f);
