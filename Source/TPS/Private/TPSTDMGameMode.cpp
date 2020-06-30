@@ -4,6 +4,8 @@
 #include "TPSTDMGameMode.h"
 #include "TPSPlayerState.h"
 #include "TPSGameState.h"
+#include "TPSCharacter.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 
 
@@ -118,6 +120,9 @@ void ATPSTDMGameMode::PreparingForGame()
 
 }
 
+
+
+
 void ATPSTDMGameMode::StartGame()
 {
 	//游戏只开始一次
@@ -136,11 +141,100 @@ void ATPSTDMGameMode::EndGame()
 		return;
 	}
 	SetGameStatus(EGameStatus::GameFinished);
+	GameOver();
 }
 
 void ATPSTDMGameMode::GameOver()
 {
+	auto world = GetWorld();
+	if (ensureAlways(world))
+	{
+		for (auto It = world->GetPlayerControllerIterator(); It; ++It)
+		{
+			auto PC = It->Get();
+			if(ensure(PC))
+			{
+				auto character = Cast<ATPSCharacter>(PC->GetCharacter());
+				if (ensure(character))
+				{
+					//停止移动，解除控制器
+					character->GetMovementComponent()->StopMovementImmediately();
+					character->DetachFromControllerPendingDestroy();
+				}
+			}
+		}
+	}
+
 	// @TODO 所有玩家将不可操控
+}
+
+void ATPSTDMGameMode::ClearScore()
+{
+	auto world = GetWorld();
+	if (ensureAlways(world))
+	{
+		for (auto It = world->GetPlayerControllerIterator(); It; ++It)
+		{
+			auto PC = It->Get();
+			if (PC)
+			{
+				auto PS = PC->GetPlayerState<ATPSPlayerState>();
+				PS->SetScore(0);
+			}
+		}
+	}
+}
+
+float ATPSTDMGameMode::QueryTeamScore(int team)
+{
+	auto world = GetWorld();
+	if (ensureAlways(world))
+	{
+		auto GS = world->GetGameState<ATPSGameState>();
+		if (ensure(GS))
+		{
+			if (team == 0)
+			{
+				return GS->TeamAScore;
+			}
+			else
+			{
+				return GS->TeamBScore;
+			}
+		}
+	}
+	return 0;
+}
+
+void ATPSTDMGameMode::SetTeamScore(int team, float count)
+{
+	auto world = GetWorld();
+	if (ensureAlways(world))
+	{
+		auto GS = world->GetGameState<ATPSGameState>();
+		if (ensure(GS))
+		{
+			if (team == 0)
+			{
+				GS->TeamAScore = count;
+			}
+			else
+			{
+				GS->TeamBScore = count;
+			}
+			float eps = 1e-4;
+			//有队伍获胜
+			if (GS->TeamAScore >= 100.0f - eps || GS->TeamBScore >= 100.0f - eps)
+			{
+				EndGame();
+			}
+		}
+	}
+}
+
+void ATPSTDMGameMode::AddTeamScore(int team, float count)
+{
+	SetTeamScore(team, QueryTeamScore(team) + count);
 }
 
 void ATPSTDMGameMode::Tick(float DeltaSeconds)

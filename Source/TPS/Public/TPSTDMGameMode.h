@@ -38,6 +38,9 @@ protected:
 
 	void GameOver();
 
+	//µ√∑÷«Â¡„
+	void ClearScore();
+
 	void Tick(float DeltaSeconds) override;
 
 
@@ -48,6 +51,14 @@ public:
 
 	void StartPlay() override;
 
+	UFUNCTION(BlueprintCallable, Category = "GameMode")
+		float QueryTeamScore(int team);
+
+	UFUNCTION(BlueprintCallable, Category = "GameMode")
+		void SetTeamScore(int team, float count);
+
+	UFUNCTION(BlueprintCallable, Category = "GameMode")
+		void AddTeamScore(int team, float count);
 
 	void RespawnPlayer(AController * Controller, float InTime);
 

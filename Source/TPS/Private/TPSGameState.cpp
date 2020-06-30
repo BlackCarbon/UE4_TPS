@@ -15,7 +15,7 @@ ATPSGameState::ATPSGameState()
 		srand(time(nullptr));
 	}
 	GameStatus = EGameStatus::Idle;
-
+	TeamAScore = TeamBScore = 0;
 	TeamStates.Empty();
 }
 
@@ -50,7 +50,7 @@ int ATPSGameState::GetTeamStateByController(AController *player)
 int ATPSGameState::GetTeamStateByActor(AActor * player)
 {
 	auto character = Cast<ATPSCharacter>(player);
-	if (character)
+	if (ensureAlways(character))
 	{
 		return GetTeamStateByController(character->GetController());
 	}
@@ -100,4 +100,6 @@ void ATPSGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ATPSGameState, GameStatus);
+	DOREPLIFETIME(ATPSGameState, TeamAScore);
+	DOREPLIFETIME(ATPSGameState, TeamBScore);
 }

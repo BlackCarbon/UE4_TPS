@@ -24,6 +24,18 @@ void ASWeapon::BeginPlay()
 void ASWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	auto owner = GetOwner();
+	if (!IsValid(owner))
+	{
+		//不存在销毁事件
+		if (!GetWorldTimerManager().IsTimerActive(DestroySelf))
+		{
+			FTimerDelegate func = FTimerDelegate::CreateLambda([=]() { Destroy(); });
+			GetWorldTimerManager().SetTimer(DestroySelf, func, 3.0f, false);
+		}
+
+
+	}
 
 }
 

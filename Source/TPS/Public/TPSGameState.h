@@ -40,6 +40,13 @@ public:
 		TMap<int,int> TeamStates;
 
 
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "GameState")
+		int TeamAScore;
+
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "GameState")
+		int TeamBScore;
+
+
 	//返回该玩家的队伍，未注册的则返回0
 	UFUNCTION(BlueprintCallable, Category = "GameState")
 		int GetTeamState(int playerIndex);
