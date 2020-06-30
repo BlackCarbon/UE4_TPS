@@ -6,15 +6,17 @@
 #include <ctime>
 #include <utility>
 #include <TPSCharacter.h>
+#include "TPSPlayerController.h"
 
 ATPSGameState::ATPSGameState()
 {
 	if (HasAuthority())
 	{
-		playerList.Empty();
 		srand(time(nullptr));
 	}
-
+	playerList.Empty();
+	GameStatus = EGameStatus::Idle;
+	TeamAScore = TeamBScore = 0;
 	TeamStates.Empty();
 }
 
@@ -24,32 +26,35 @@ ATPSGameState::ATPSGameState()
 
 int ATPSGameState::GetTeamState(int playerIndex)
 {
-	if (TeamStates.Contains(playerIndex))
-		return TeamStates[playerIndex];
-	else
+	for (int i = 0; i < TeamStates.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Doesn't exist playerIndex : %d"), playerIndex);
-		return 0;
+		if (TeamStates[i].x == playerIndex)
+		{
+			return TeamStates[i].y;
+		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Doesn't exist playerIndex : %d"), playerIndex);
+	return 0;
 }
 
 
 int ATPSGameState::GetTeamStateByController(AController *player)
 {
-	if (playerList.Contains(player))
-		return GetTeamState(playerList[player]);
-	else
+	for (int i = 0; i < playerList.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Doesn't exist such player"));
-		return 0;
+		if (playerList[i].x == player)
+		{
+			return GetTeamState(playerList[i].y);
+		}
 	}
-
+	UE_LOG(LogTemp, Warning, TEXT("Doesn't exist such player"));
+	return 0;
 }
 
 int ATPSGameState::GetTeamStateByActor(AActor * player)
 {
 	auto character = Cast<ATPSCharacter>(player);
-	if (character)
+	if (ensureAlways(character))
 	{
 		return GetTeamStateByController(character->GetController());
 	}
@@ -65,7 +70,7 @@ int ATPSGameState::TeamCount(int team)
 	int cnt = 0;
 	for (auto it : TeamStates)
 	{
-		if (it.Value == team)
+		if (it.y == team)
 		{
 			cnt++;
 		}
@@ -76,23 +81,70 @@ int ATPSGameState::TeamCount(int team)
 
 void ATPSGameState::AddNewPlayer(AController* player,int playerId)
 {
-	playerList.Add(player, playerId);
+	//如果已经存在，则不重复添加
+	for (int i = 0; i < playerList.Num(); i++)
+	{
+		if (playerList[i].x == player)
+		{
+			return;
+		}
+	}
 	int zerocnt = TeamCount(0);
 	int onecnt = TeamCount(1);
+	int newTeamID = 0;
 	if (onecnt == zerocnt)
 	{
-		TeamStates.Add(playerId, rand() & 1);
+		newTeamID = rand() & 1;
 	}
 	else
 	{
-		TeamStates.Add(playerId, onecnt < zerocnt);
+		newTeamID = onecnt < zerocnt;
 	}
+	{
+		FAcontrollerIntPair newPlayer;
+		newPlayer.x = player;
+		newPlayer.y = playerId;
+		playerList.Emplace(newPlayer);
+	}
+	{
+		FIntIntPair newTeamStatus;
+		newTeamStatus.x = playerId;
+		newTeamStatus.y = newTeamID;
+		TeamStates.Emplace(newTeamStatus);
+	}
+	{
+		auto PC = Cast<ATPSPlayerController>(player);
+		if (PC)
+		{
+			PC->TeamID = newTeamID;
+		}
+	}
+}
+
+bool ATPSGameState::DoesPlayerAlreadyExist(AController *player)
+{
+	for (int i = 0; i < playerList.Num(); i++)
+	{
+		if (playerList[i].x == player)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void ATPSGameState::OnRep_GameStatus(EGameStatus OldStatus)
+{
+	OnGameStatusChanged(GameStatus, OldStatus);
 }
 
 void ATPSGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-
+	DOREPLIFETIME(ATPSGameState, GameStatus);
+	DOREPLIFETIME(ATPSGameState, TeamAScore);
+	DOREPLIFETIME(ATPSGameState, TeamBScore);
+	DOREPLIFETIME(ATPSGameState, playerList);
 	DOREPLIFETIME(ATPSGameState, TeamStates);
 }

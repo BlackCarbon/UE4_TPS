@@ -69,7 +69,7 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 {
 	if (Health < 1.0f && !bDied)
 	{
-
+		
 		bDied = true;
 
 		if (HasAuthority())
@@ -83,6 +83,25 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 			}
 		}
 
+		if (HasAuthority())
+		{
+			auto world = GetWorld();
+			if (ensureAlways(world))
+			{
+				auto GM = world->GetAuthGameMode<ATPSTDMGameMode>();
+				auto GS = world->GetGameState<ATPSGameState>();
+				if (ensureAlways(GM) && ensureAlways(GS))
+				{
+					int Team1 = GS->GetTeamStateByController(InstigatedBy);
+					int Team0 = GS->GetTeamStateByActor(this);
+					if (ensure(Team0 != Team1))
+					{
+						GM->AddTeamScore(Team1, 1.0f);
+					}
+				}
+			}
+		}
+
 		SetLifeSpan(5.0f);
 
 		GetMovementComponent()->StopMovementImmediately();
@@ -91,6 +110,7 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 
 		DetachFromControllerPendingDestroy();
 
+	
 
 		
 

@@ -23,8 +23,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "Components")
 	USkeletalMeshComponent* MeshComp;
+
+	//销毁自己的事件
+	FTimerHandle DestroySelf;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 
 };
