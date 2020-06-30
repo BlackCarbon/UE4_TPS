@@ -15,6 +15,10 @@ class TPS_API ATPSPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
+	
+	ATPSPlayerController();
+
+
 	UPROPERTY(Replicated ,BlueprintReadOnly, VisibleAnywhere, Category = "GameState")
 		int TeamID;
 

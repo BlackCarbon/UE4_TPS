@@ -5,6 +5,11 @@
 #include "Net\UnrealNetwork.h"
 
 
+ATPSPlayerController::ATPSPlayerController()
+{
+	TeamID = 0;
+}
+
 
 void ATPSPlayerController::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {

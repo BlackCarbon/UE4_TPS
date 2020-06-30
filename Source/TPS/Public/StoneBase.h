@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "StoneBase.generated.h"
+class UStaticMeshComponent;
 
 UCLASS()
 class TPS_API AStoneBase : public AActor
@@ -14,11 +15,19 @@ class TPS_API AStoneBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AStoneBase();
-	FIntVector position;
+	FIntVector position = FIntVector::ZeroValue;;
 	static AStoneBase* CreateStone(FIntVector pos);
+
+	UPROPERTY(BlueprintReadWrite,Category="Components")
+	UStaticMeshComponent *mesh;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
 
 public:	
 	// Called every frame

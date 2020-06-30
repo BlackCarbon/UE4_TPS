@@ -2,7 +2,8 @@
 
 
 #include "MapLauncher.h"
-//#include "StoneBase.h"
+#include "StoneBase.h"
+#include "BlueprintGraphClasses.h"
 //#include "MapProductor.h"
 
 // Sets default values for this component's properties
@@ -41,10 +42,18 @@ void UMapLauncher::InitializeMap() {
 	for (int i = 0;i < map.size();i++) {
 		for (int j = 0;j < map[i].size();j++) {
 			for (int k = 0;k <= map[i][j];k++) {
+				UE_LOG(LogTemp, Log, TEXT("Product Stone"));
 			/*	FVector p = PositionTranslator::transFromDispersedToContinuous(FIntVector{
 					i, j, k
-				});*/
-			//	UStoneBase::CreateStone(FIntVector(i, j, k));
+				});
+				
+				FTransform spawnTransform;
+				spawnTransform.SetLocation(transFromDispersedToContinuous(FIntVector(i, j, k)));
+			//	ConstructorHelpers::FClassFinder<AStoneBase> BPClass(TEXT("/Game/Blueprints"));
+				FActorSpawnParameters spawn;
+				ConstructorHelpers::FClassFinder<AStoneBase> BPClass(TEXT("/Game/Blueprints"));
+				AStoneBase *x = GetWorld()->SpawnActor<AStoneBase>(BPClass.Class,spawnTransform, spawn);
+			//	instance->GetTransform().setLocation(transFromDispersedToContinuous(FIntVector(i, j, k)));*/
 			}
 		}
 	}
@@ -57,7 +66,7 @@ FVector UMapLauncher::transFromDispersedToContinuous(FIntVector p) {
 	ans.Z = p.Z * HEIGHT + HEIGHT / 2.0;
 	ans.Y = (p.Y - 0.5 * (p.X & 1)) * sqrt(3) * EDGEWIDTH;
 	ans.X = p.X * 1.5 * EDGEWIDTH;
-	return ans;
+	return ans*50;
 }
 
 /*
