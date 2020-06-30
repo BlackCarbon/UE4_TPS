@@ -45,10 +45,17 @@ void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 		if (loc.Z > 40) {
 			FIntVector np = position;
 			np.Z += 1;
-			UMapLauncher::getInstance()->CreateStone(GetWorld(), "BP_Fire", np);
+			if (other->GetActorLabel().StartsWith("BP_Fire")) {
+
+				UMapLauncher::getInstance()->TryCreateStone("BP_Fire", np);
+			}
+			else if (other->GetActorLabel().StartsWith("BP_Witer")) {
+
+				UMapLauncher::getInstance()->TryCreateStone("BP_Water", np);
+			}
 		}
 		else {
-			Destroy();
+			UMapLauncher::getInstance()->TryCreateStone("", position);
 		}
 		UE_LOG(LogTemp, Log, TEXT("z :%f"), loc.Z);
 	}

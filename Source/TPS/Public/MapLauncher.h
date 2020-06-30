@@ -64,7 +64,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "间隔空间")
 		int BlockBlank=0;
 	UFUNCTION()
-	AStoneBase *CreateStone(UWorld* world, FString BP_Name, FIntVector pos);
+	bool TryCreateStone(const FString& BP_Name, const FIntVector& pos);
 	//UPROPERTY(EditDefaultsOnly, Category = "初始缩放")
 	//static float OriginScale;
 //	PositionTranslator * PosTrans;
@@ -77,7 +77,10 @@ protected:
 	
 	void InitializeMap();
 
-	
+	TMap<FIntVector, FString>StoneMap;
+
+	bool DispatchCreateMsg(const FString &BP_Name,const FIntVector& pos);
+	//AStoneBase *CreateStone(UWorld* world, FString BP_Name, FIntVector pos);
 
 
 public:		

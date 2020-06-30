@@ -43,7 +43,8 @@ void UMapLauncher::InitializeMap() {
 		for (int j = 0;j < map[i].size();j++) {
 			for (int k = 0;k <= map[i][j];k++) {
 				UE_LOG(LogTemp, Log,TEXT( "%d %d %d"), i, j, k);
-				CreateStone(GetWorld(), "BP_NStoneBase", FIntVector(i, j, (BlockBlank+1)*k));
+				
+				TryCreateStone("BP_NStoneBase", FIntVector(i, j, (BlockBlank+1)*k));
 /*				UClass* BlueprintVar = StaticLoadClass(AStoneBase::StaticClass(), nullptr, TEXT("Blueprint'/Game/Blueprints/BP_NStoneBase.BP_NStoneBase_C'"));
 				if (BlueprintVar != nullptr)
 				{
@@ -87,7 +88,60 @@ FVector UMapLauncher::transFromDispersedToContinuous(FIntVector p) {
 	return ans*50;
 }
 
-AStoneBase* UMapLauncher::CreateStone(UWorld* world, FString BP_Name, FIntVector pos) {
+bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos) {
+	if ((BP_Name == "BP_Fire" || BP_Name == "BP_Water" || BP_Name == "") == false) {
+		UE_LOG(LogTemp, Warning, TEXT("格式错误"));
+		return false;
+	}
+
+	if (BP_Name == "") {
+		if (*StoneMap.Find(pos) == "BP_NStoneName") {
+			DispatchCreateMsg("", pos);
+			StoneMap.Remove(pos);
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("删除位置为空"));
+			return false;
+		}
+
+		//	StoneMap.Add(TTuple<FIntVector, FString>(pos, *BP_Name));
+	}
+	else {
+
+		FString* name = StoneMap.Find(pos);
+		if (*name == *BP_Name || *name == "BP_NStoneName") {
+			return nullptr;
+		}
+		else
+		{
+			if (name != nullptr) {
+
+				if (BP_Name == "BP_Fire") {
+					StoneMap.Add(TTuple<FIntVector, FString>(pos, "BP_NStoneName"));
+					return DispatchCreateMsg("BP_NStoneName", pos);
+				}
+				else if (BP_Name == "BP_Water") {
+					StoneMap.Remove(pos);
+					return DispatchCreateMsg("BP_Wind", pos);
+					//	StoneMap.Add(TTuple<FIntVector, FString>(pos, "BP_Wind"));
+				}
+			}
+			else {
+				StoneMap.Add(TTuple<FIntVector, FString>(pos, *BP_Name));
+				return DispatchCreateMsg(BP_Name, pos);
+			}
+		}
+	}
+	return true;
+
+}
+
+
+bool UMapLauncher::DispatchCreateMsg(const FString&BP_Name, const FIntVector& pos) {
+	//向本地端发送创造实例的消息
+	return false;
+}
+/*AStoneBase* UMapLauncher::CreateStone(UWorld* world, FString BP_Name, FIntVector pos) {
 	//AStoneBase* x =GetWorld()-> SpawnActor<AStoneBase>(AStoneBase::StaticClass(),UMapLauncher->getInstance()->transFromDispersedToContinuous(pos));
 	//return x;
 	FString s = "Blueprint'/Game/Blueprints/";
@@ -109,7 +163,7 @@ AStoneBase* UMapLauncher::CreateStone(UWorld* world, FString BP_Name, FIntVector
 		}
 	}
 	return nullptr;
-}
+}*/
 
 /*
 template<UCLASS T>
