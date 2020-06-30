@@ -18,6 +18,27 @@ enum class EGameStatus : uint8
 	GameFinished
 };
 
+USTRUCT()
+struct FIntIntPair
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+		int32 x;
+	UPROPERTY()
+		int32 y;
+};
+
+USTRUCT()
+struct FAcontrollerIntPair
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+		AController* x;
+	UPROPERTY()
+		int32 y;
+};
 
 /**
  *
@@ -31,13 +52,19 @@ public:
 
 	ATPSGameState();
 
+// 	
+// 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameState")
+// 		TMap<AController*,int> playerList;
 	//玩家列表
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameState")
-		TMap<AController*,int> playerList;
+	UPROPERTY(Replicated)
+		TArray<FAcontrollerIntPair> playerList;
 
+// 	
+// 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameState")
+// 		TMap<int,int> TeamStates;
 	//储存着队伍信息
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GameState")
-		TMap<int,int> TeamStates;
+	UPROPERTY(Replicated)
+		TArray<FIntIntPair> TeamStates;
 
 
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "GameState")
@@ -69,6 +96,9 @@ public:
 	//对局状态
 	UPROPERTY(ReplicatedUsing=OnRep_GameStatus , BlueprintReadOnly, Category = "GameState")
 		EGameStatus GameStatus;
+
+	bool DoesPlayerAlreadyExist(AController *player);
+
 
 protected:
 

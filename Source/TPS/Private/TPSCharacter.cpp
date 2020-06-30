@@ -69,7 +69,7 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 {
 	if (Health < 1.0f && !bDied)
 	{
-
+		
 		bDied = true;
 
 		if (HasAuthority())
