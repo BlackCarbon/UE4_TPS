@@ -11,7 +11,9 @@ AStoneBase::AStoneBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>( TEXT("Static Mesh"));
-//	mesh->SetCollisionProfileName(TEXT("BlackAll"));
+	//this->SetRootComponent(mesh);
+//	mesh->SetAttachParent(GetRootComponent());
+	//	mesh->SetCollisionProfileName(TEXT("BlackAll"));
 	//mesh->GetComponentToWorld().SetScale3D(FVector(50));
 //	mesh=
 }
@@ -21,7 +23,6 @@ void AStoneBase::BeginPlay()
 {
 	Super::BeginPlay();
 	mesh->OnComponentHit.AddDynamic(this, &AStoneBase::OnHit);
-
 }
 
 // Called every frame

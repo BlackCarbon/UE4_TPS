@@ -18,7 +18,7 @@ public:
 	FIntVector position = FIntVector::ZeroValue;;
 	static AStoneBase* CreateStone(FIntVector pos);
 
-	UPROPERTY(VisibleAnywhere,Category="Components")
+	UPROPERTY(BlueprintReadWrite,Category="Components")
 	UStaticMeshComponent *mesh;
 
 protected:
