@@ -6,6 +6,7 @@
 #include "TPSGameState.h"
 #include "TPSCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "TPSPlayerController.h"
 
 
 
@@ -15,6 +16,7 @@ ATPSTDMGameMode::ATPSTDMGameMode()
 {
 	PlayerStateClass = ATPSPlayerState::StaticClass();
 	GameStateClass = ATPSGameState::StaticClass();
+	PlayerControllerClass = ATPSPlayerController::StaticClass();
 
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.TickInterval = 0.15f;

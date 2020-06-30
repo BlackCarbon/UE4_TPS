@@ -6,6 +6,7 @@
 #include <ctime>
 #include <utility>
 #include <TPSCharacter.h>
+#include "TPSPlayerController.h"
 
 ATPSGameState::ATPSGameState()
 {
@@ -110,6 +111,13 @@ void ATPSGameState::AddNewPlayer(AController* player,int playerId)
 		newTeamStatus.x = playerId;
 		newTeamStatus.y = newTeamID;
 		TeamStates.Emplace(newTeamStatus);
+	}
+	{
+		auto PC = Cast<ATPSPlayerController>(player);
+		if (PC)
+		{
+			PC->TeamID = newTeamID;
+		}
 	}
 }
 
