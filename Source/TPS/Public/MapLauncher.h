@@ -14,6 +14,8 @@ using namespace std;
 #include "Components/ActorComponent.h"
 #include "MapLauncher.generated.h"
 
+class AStoneBase;
+
 /*static class PositionTranslator {
 public:
 	static F HEIGHT;
@@ -51,14 +53,18 @@ public:
 
 
 	UPROPERTY(EditDefaultsOnly,Category="块大小")
-	int BlockSize;
+	int BlockSize=4;
 
 	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
-	FIntVector MapSize;
+	FIntVector MapSize=FIntVector(8,8,4);
 		
 	UPROPERTY(EditDefaultsOnly, Category = "物体缩放")
-	FIntVector StoneScale;
+	FIntVector StoneScale=FIntVector(1);
 
+	UPROPERTY(EditDefaultsOnly, Category = "间隔空间")
+		int BlockBlank=0;
+	UFUNCTION()
+	AStoneBase *CreateStone(UWorld* world, FString BP_Name, FIntVector pos);
 	//UPROPERTY(EditDefaultsOnly, Category = "初始缩放")
 	//static float OriginScale;
 //	PositionTranslator * PosTrans;
@@ -71,6 +77,7 @@ protected:
 	
 	void InitializeMap();
 
+	
 
 
 public:		
