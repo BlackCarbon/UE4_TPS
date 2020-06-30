@@ -67,8 +67,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Function that handles firing projectiles.
-	UFUNCTION(BlueprintCallable, Category = "Projectile")
-		void Fire();
+	virtual FVector GetPawnViewLocation() const override;
+
 
 };
