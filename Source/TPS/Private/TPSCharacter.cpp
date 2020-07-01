@@ -11,6 +11,8 @@
 #include "Net/UnrealNetwork.h"
 #include "TPSTDMGameMode.h"
 
+class UUserWidget;
+
 // Sets default values
 ATPSCharacter::ATPSCharacter()
 {
@@ -39,7 +41,7 @@ void ATPSCharacter::BeginPlay()
 
 	HealthComp->OnHealthChanged.AddDynamic(this, &ATPSCharacter::OnMyHealthChanged);
 
-	
+
 }
 
 void ATPSCharacter::MoveForward(float Val)
