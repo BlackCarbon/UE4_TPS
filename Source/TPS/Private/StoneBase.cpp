@@ -35,16 +35,29 @@ void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 	ATPS_Projectile *other = Cast<ATPS_Projectile>(OtherActor);
 	if(other)
 	{
-		float var = Hit.Location.Z / mesh->GetComponentTransform().GetScale3D().Z;
+		FVector loc = Hit.Location - GetTransform().GetLocation();
+		
+		/*
+		float var = loc.Z / mesh->GetComponentTransform().GetScale3D().Z;
 		if (abs(round(var) - var) < 1e-6) {
 			Destroy();
+		}*/
+		if (loc.Z > 40) {
+			FIntVector np = position;
+			np.Z += 1;
+			if (other->GetActorLabel().StartsWith("BP_Fire")) {
+
+				UMapLauncher::getInstance()->TryCreateStone("BP_Fire", np);
+			}
+			else if (other->GetActorLabel().StartsWith("BP_Witer")) {
+
+				UMapLauncher::getInstance()->TryCreateStone("BP_Water", np);
+			}
 		}
-		UE_LOG(LogTemp, Log, TEXT("Z %f"), Hit.Location.Z);
+		else {
+			UMapLauncher::getInstance()->TryCreateStone("", position);
+		}
+		UE_LOG(LogTemp, Log, TEXT("z :%f"), loc.Z);
 	}
 }
 
-AStoneBase* AStoneBase::CreateStone(FIntVector pos) {
-	//AStoneBase* x =GetWorld()-> SpawnActor<AStoneBase>(AStoneBase::StaticClass(),UMapLauncher->getInstance()->transFromDispersedToContinuous(pos));
-	//return x;
-	return nullptr;
-}

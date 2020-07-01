@@ -2,4 +2,36 @@
 
 
 #include "WindBase.h"
+#include "TPSCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
+// Sets default values
+void AWindBase::BeginPlay()
+{
+//	mesh->OnComponentHit.
+//	mesh->SetCollisionResponseToAllChannels(ECR_Ignore);
+	mesh->SetCollisionResponseToAllChannels(ECR_Overlap);
+	mesh->OnComponentBeginOverlap.AddDynamic(this, &AWindBase::OnOverlapBegin);
+}
+void AWindBase::OnOverlapBegin(class UPrimitiveComponent* ThisComp,class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult){
+	ATPSCharacter *player = Cast<ATPSCharacter>(OtherActor);
+	if (player) {
+	//	OtherComp->
+		//FVector v = OtherComp->GetPhysicsLinearVelocity();
+		//v.Z = strength;
+	//	OtherComp
+		//OtherActor->componet
+		//OtherComp->SetPhysicsLinearVelocity(v,true);
+		//UE_LOG(LogTemp, Log, TEXT("vz :%f"), OtherComp->GetPhysicsLinearVelocity().Z);
+		/*UCharacterMovementComponent* move=nullptr;
+		OtherActor->set
+		for (int i = 0;move==nullptr&&i < OtherActor->GetVelocity();i++) {
+			move = Cast<UCharacterMovementComponent>(OtherActor->GetChildComponent(i));
 
+		}
+		if (move) {
+			UE_LOG(LogTemp, Log, TEXT("launch"));
+		}*/
+	//	OtherComp->
+		player->LaunchCharacter(FVector(0,0,1) * strength,false,true);
+	}
+}

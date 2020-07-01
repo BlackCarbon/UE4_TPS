@@ -16,10 +16,14 @@ public:
 	// Sets default values for this actor's properties
 	AStoneBase();
 	FIntVector position = FIntVector::ZeroValue;;
-	static AStoneBase* CreateStone(FIntVector pos);
+	
 
-	UPROPERTY(BlueprintReadWrite,Category="Components")
+	UPROPERTY(VisibleAnywhere,Category="Components")
 	UStaticMeshComponent *mesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "CreationName")
+		FString ClassName;
+
 
 protected:
 	// Called when the game starts or when spawned
