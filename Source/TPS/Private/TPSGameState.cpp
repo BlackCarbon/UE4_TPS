@@ -7,6 +7,7 @@
 #include <utility>
 #include <TPSCharacter.h>
 #include "TPSPlayerController.h"
+#include "Blueprint/UserWidget.h"
 
 ATPSGameState::ATPSGameState()
 {
@@ -137,6 +138,8 @@ void ATPSGameState::OnRep_GameStatus(EGameStatus OldStatus)
 {
 	OnGameStatusChanged(GameStatus, OldStatus);
 }
+
+
 
 void ATPSGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
