@@ -4,9 +4,17 @@
 #include "WindBase.h"
 #include "TPSCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MapLauncher.h"
 // Sets default values
 void AWindBase::BeginPlay()
 {
+	FVector scaler = this->GetActorScale3D();
+	FVector ms = UMapLauncher::getInstance()->StoneScale;
+	scaler.X *= ms.X;
+	scaler.Y *= ms.Y;
+	scaler.Z *= ms.Z;
+//	UE_LOG(LogTemp, Log, TEXT("s=%f"), scaler.X);
+	this->SetActorScale3D(scaler);
 //	mesh->OnComponentHit.
 //	mesh->SetCollisionResponseToAllChannels(ECR_Ignore);
 	mesh->SetCollisionResponseToAllChannels(ECR_Overlap);

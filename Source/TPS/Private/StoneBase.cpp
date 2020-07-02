@@ -6,6 +6,7 @@
 #include "MapLauncher.h"
 #include "Components/TPSHealthComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AStoneBase::AStoneBase()
@@ -14,8 +15,12 @@ AStoneBase::AStoneBase()
 	PrimaryActorTick.bCanEverTick = true;
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>( TEXT("Static Mesh"));
 
+	RootComponent = mesh;
+
 	bDied = false;
 	HealthComp = CreateDefaultSubobject<UTPSHealthComponent>(TEXT("HealthComp"));
+
+	SetReplicates(true);
 	//this->SetRootComponent(mesh);
 //	mesh->SetAttachParent(GetRootComponent());
 	//	mesh->SetCollisionProfileName(TEXT("BlackAll"));
@@ -27,6 +32,13 @@ AStoneBase::AStoneBase()
 void AStoneBase::BeginPlay()
 {
 	Super::BeginPlay();
+	FVector scaler = this->GetActorScale3D();
+	FVector ms = UMapLauncher::getInstance()->StoneScale;
+	scaler.X *= ms.X;
+	scaler.Y *= ms.Y;
+	scaler.Z *= ms.Z;
+//	UE_LOG(LogTemp, Log, TEXT("s=%f"), scaler.X);
+	this->SetActorScale3D(scaler);
 	mesh->OnComponentHit.AddDynamic(this, &AStoneBase::OnHit);
 
 	HealthComp->OnHealthChanged.AddDynamic(this, &AStoneBase::OnMyHealthChanged);

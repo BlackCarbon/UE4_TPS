@@ -60,10 +60,10 @@ public:
 	FIntVector MapSize=FIntVector(8,8,4);
 		
 	UPROPERTY(EditDefaultsOnly, Category = "物体缩放")
-	FIntVector StoneScale=FIntVector(1);
+	FVector StoneScale=FVector(2,2,1);
 
 	UPROPERTY(EditDefaultsOnly, Category = "间隔空间")
-		int BlockBlank=0;
+		int BlockBlank=4;
 	UFUNCTION()
 	bool TryCreateStone(const FString& BP_Name, const FIntVector& pos);
 
@@ -82,7 +82,7 @@ protected:
 
 	void InitializePlayerStart(const vector<vector<int>>&map);
 
-	AActor* CreateActor(const FString& BP_Name, const FIntVector& pos);
+//	AActor* CreateActor(const FString& BP_Name, const FIntVector& pos);
 
 	TMap<FIntVector, FString>StoneMap;
 
