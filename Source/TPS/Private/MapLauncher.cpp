@@ -3,7 +3,6 @@
 
 #include "MapLauncher.h"
 #include "StoneBase.h"
-
 //#include "MapProductor.h"
 
 // Sets default values for this component's properties
@@ -37,6 +36,10 @@ void UMapLauncher::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 
 void UMapLauncher::InitializeMap() {
+
+
+
+
 	vector<vector<int>>map = MapProductor(BlockSize,MapSize).getMap(1349880437);
 	//PositionTranslator trans(StoneScale);
 	for (int i = 0;i < map.size();i++) {
