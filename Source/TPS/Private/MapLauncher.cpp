@@ -49,7 +49,7 @@ void UMapLauncher::InitializePlayerStart(const vector<vector<int>>&map)
 	}
 	for (int i = 0;i < BlockSize;i++) {
 		for (int j = 0;j < BlockSize;j++) {
-			DispatchCreateMsg("BP_PlayerStart_0",FIntVector(i, j, map[i][j] + 4)); //CreateActor("BP_PlayerStart",FIntVector(i,j, map[i][j]+4));
+			DispatchCreateMsg("BP_PlayerStart_0",FIntVector(i, j, map[i][j]*(BlockBlank + 1) + 4)); //CreateActor("BP_PlayerStart",FIntVector(i,j, map[i][j]+4));
 		//	APlayerStart* x = Cast<APlayerStart>(obj);
 		//	x->PlayerStartTag = FName("0");
 		}
@@ -58,15 +58,15 @@ void UMapLauncher::InitializePlayerStart(const vector<vector<int>>&map)
 		for (int j = 0;j < BlockSize;j++) {
 			int32 x = map.size() - 1 - i;
 			int32 y = map[x].size() - 1 - j;
-			DispatchCreateMsg("BP_PlayerStart_1", FIntVector(x,y, map[x][y] + 4));
+			DispatchCreateMsg("BP_PlayerStart_1", FIntVector(x,y, map[x][y]*(BlockBlank + 1) + 4));
 			
 		}
 	}
 	int32 x = map.size() ;
 	int32 y = map[x/2].size() ;
-	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y/2, mx+ 10));
-	DispatchCreateMsg("BP_NEWFlag", FIntVector(x / 2,BlockSize-1, mx + 10));
-	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y-BlockSize, mx + 10));
+	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y/2, mx* (BlockBlank + 1) + 10));
+	DispatchCreateMsg("BP_NEWFlag", FIntVector(x / 2,BlockSize-1, mx* (BlockBlank + 1) + 10));
+	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y-BlockSize, mx * (BlockBlank + 1) + 10));
 }
 void UMapLauncher::InitializeMap() {
 	vector<vector<int>>map = MapProductor(BlockSize,MapSize).getMap(1349880437);
