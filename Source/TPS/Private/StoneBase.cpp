@@ -50,7 +50,7 @@ void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 		if (abs(round(var) - var) < 1e-6) {
 			Destroy();
 		}*/
-		if (loc.Z > 40) {
+		if (loc.Z > 40) {//打在砖块顶面
 			FIntVector np = position;
 			np.Z += 1;
 			if (other->GetActorLabel().StartsWith("BP_Fire")) {
@@ -62,7 +62,8 @@ void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 				UMapLauncher::getInstance()->TryCreateStone("BP_Water", np);
 			}
 		}
-		else {
+		else {//打在砖块侧面
+			UMapLauncher::getInstance()->TryCreateStone("", position);
 			
 		}
 		UE_LOG(LogTemp, Log, TEXT("z :%f"), loc.Z);
