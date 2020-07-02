@@ -8,6 +8,7 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "TPSPlayerController.h"
 #include "StoneBase.h"
+#include "GameFramework/PlayerStart.h"
 // #define  FOX_DEBUG
 
 
@@ -64,8 +65,20 @@ void ATPSTDMGameMode::RespawnPlayer(AController * Controller)
 	//同一个世界，同一个梦想。
 	if (Controller && Controller->GetWorld() == GetWorld() && Controller->GetPawn() == nullptr)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Respawn successfully!"));
-		RestartPlayer(Controller);
+		auto GS = GetGameState<ATPSGameState>();
+		if (ensureAlways(GS))
+		{
+			int TeamID = GS->GetTeamStateByController(Controller);
+			AActor *pos;
+			if (TeamID)
+				pos = FindPlayerStart(Controller, FString("1"));
+			else
+				pos = FindPlayerStart(Controller, FString("0"));
+			auto playerStart = Cast<APlayerStart>(pos);
+			playerStart->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+			RestartPlayerAtPlayerStart(Controller, playerStart);
+			UE_LOG(LogTemp, Log, TEXT("Respawn successfully!"));
+		}
 	}
 }
 
