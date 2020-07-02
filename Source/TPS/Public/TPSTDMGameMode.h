@@ -38,6 +38,8 @@ protected:
 
 	void GameOver();
 
+	void KillAllPlayer();
+
 	//µ√∑÷«Â¡„
 	void ClearScore();
 
@@ -67,6 +69,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "GameMode")
 		FOnActorKilled OnActorKilled;
 
+	UFUNCTION()
+		virtual void HandleOnActorKilled(AActor* VictimActor, AActor* KillerActor, AController* KillerController);
 
 
 };

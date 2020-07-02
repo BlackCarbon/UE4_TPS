@@ -8,6 +8,8 @@
 #include <TPSPlayerState.h>
 #include <TPSGameState.h>
 #define FOX_DEBUG
+#define GAMEMODE_TDM
+#define GAMEMODE_FLAG
 
 // Sets default values for this component's properties
 UTPSHealthComponent::UTPSHealthComponent()
@@ -94,6 +96,8 @@ void UTPSHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage
 	UE_LOG(LogTemp, Log, TEXT("%d Hit %d!,(TEAM: %d , %d), scored(0:%f  1:%f)"), ID2, ID1, teamID2, teamID1, teamAscore, teamBscore);
 #endif
 
+#ifdef GAMEMODE_TDM
+
 	if (bIsDied)
 	{
 		ATPSTDMGameMode* GM = Cast<ATPSTDMGameMode>(GetWorld()->GetAuthGameMode());
@@ -102,6 +106,8 @@ void UTPSHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage
 			GM->OnActorKilled.Broadcast(GetOwner(), DamageCauser, InstigatedBy);
 		}
 	}
+
+#endif
 
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 
