@@ -16,7 +16,7 @@ class TPS_API AWindBase : public AStoneBase
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Wind`s Strength")
 	float strength = 2000;
-
+protected:
 	UFUNCTION()
 		virtual void OnOverlapBegin(class UPrimitiveComponent* ThisComp,class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 public:

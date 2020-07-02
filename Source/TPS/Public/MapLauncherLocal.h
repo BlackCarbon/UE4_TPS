@@ -23,6 +23,7 @@ protected:
 	UFUNCTION()
 	AStoneBase *CreateStone(const FString &BP_Name,const FIntVector &pos);
 
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

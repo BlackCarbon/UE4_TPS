@@ -13,7 +13,7 @@ UCLASS()
 class TPS_API AWaterBase : public AWindBase
 {
 	GENERATED_BODY()
-private:
+protected:
 		virtual void OnOverlapBegin(class UPrimitiveComponent* ThisComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)override;
 
 };

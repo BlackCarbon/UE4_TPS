@@ -41,8 +41,9 @@ void ASWeapon::Tick(float DeltaTime)
 			GetWorldTimerManager().SetTimer(DestroySelf, func, 3.0f, false);
 		}
 
-
 	}
+
+
 
 }
 
@@ -64,6 +65,7 @@ void ASWeapon::Fire()
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		SpawnParams.Owner = MyOwner;
+		
 		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, EyeRotation, SpawnParams);
 
 		Effect();
@@ -109,4 +111,5 @@ void ASWeapon::Effect()
 		}
 	}
 }
+
 
