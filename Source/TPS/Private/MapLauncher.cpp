@@ -138,27 +138,23 @@ bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos)
 	else {
 
 		FString* name = StoneMap.Find(pos);
-		if (*name == *BP_Name || *name == "BP_NStoneName") {
+		if (name == nullptr) {
+			StoneMap.Add(TTuple<FIntVector, FString>(pos, BP_Name));
+			return DispatchCreateMsg(BP_Name, pos);
+		}else if (*name == BP_Name || *name == "BP_NStoneName") {
 			return nullptr;
 		}
 		else
 		{
-			if (name != nullptr) {
-
-				StoneMap.Remove(pos);
-				DispatchCreateMsg("", pos);
-				if (BP_Name == "BP_Fire") {
-					StoneMap.Add(TTuple<FIntVector, FString>(pos, "BP_NStoneName"));
-					return DispatchCreateMsg("BP_NStoneName", pos);
-				}
-				else if (BP_Name == "BP_Water") {
-					return DispatchCreateMsg("BP_Wind", pos);
-					//	StoneMap.Add(TTuple<FIntVector, FString>(pos, "BP_Wind"));
-				}
+			StoneMap.Remove(pos);
+			DispatchCreateMsg("", pos);
+			if (BP_Name == "BP_Fire") {
+				StoneMap.Add(TTuple<FIntVector, FString>(pos, "BP_NStoneName"));
+				return DispatchCreateMsg("BP_NStoneName", pos);
 			}
-			else {
-				StoneMap.Add(TTuple<FIntVector, FString>(pos, BP_Name));
-				return DispatchCreateMsg(BP_Name, pos);
+			else if (BP_Name == "BP_Water") {
+				return DispatchCreateMsg("BP_Wind", pos);
+				//	StoneMap.Add(TTuple<FIntVector, FString>(pos, "BP_Wind"));
 			}
 		}
 	}

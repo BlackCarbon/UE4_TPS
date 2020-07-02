@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "MapLauncherLocal.generated.h"
 
+class AStoneBase;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPS_API UMapLauncherLocal : public UActorComponent
@@ -22,7 +23,7 @@ protected:
 	TMap<FIntVector, AStoneBase*>StoneMap;
 
 	UFUNCTION()
-	AStoneBase *CreateStone(const FString &BP_Name,const FIntVector &pos);
+	AActor *CreateStone(const FString &BP_Name,const FIntVector &pos);
 
 
 public:	
