@@ -125,6 +125,13 @@ void ATPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!IsLocallyControlled())
+	{
+		FRotator NewRot = GetMesh()->GetRelativeRotation();
+		NewRot.Pitch = RemoteViewPitch * 360.0f / 255.0f;
+		GetMesh()->SetRelativeRotation(NewRot);
+	}
+
 }
 
 // Called to bind functionality to input
