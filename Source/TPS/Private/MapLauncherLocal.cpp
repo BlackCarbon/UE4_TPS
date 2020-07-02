@@ -32,6 +32,8 @@ void UMapLauncherLocal::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
+
+
 AStoneBase *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVector& pos) {
 	if (BP_Name == "") {
 		AStoneBase *x = StoneMap.FindRef(pos);
@@ -64,4 +66,14 @@ AStoneBase *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVec
 		}
 	}
 	return nullptr;
+}
+
+void UMapLauncherLocal::ServerCreateStone_Implementation(const FString& BP_Name, const FIntVector& pos)
+{
+	AStoneBase* x = CreateStone(BP_Name, pos);
+}
+
+bool UMapLauncherLocal::ServerCreateStone_Validate(const FString& BP_Name, const FIntVector& pos)
+{
+	return true;
 }

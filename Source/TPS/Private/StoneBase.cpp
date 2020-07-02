@@ -4,6 +4,8 @@
 #include "StoneBase.h"
 #include "TPS_Projectile.h"
 #include "MapLauncher.h"
+#include "Components/TPSHealthComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AStoneBase::AStoneBase()
@@ -11,6 +13,9 @@ AStoneBase::AStoneBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>( TEXT("Static Mesh"));
+
+	bDied = false;
+	HealthComp = CreateDefaultSubobject<UTPSHealthComponent>(TEXT("HealthComp"));
 	//this->SetRootComponent(mesh);
 //	mesh->SetAttachParent(GetRootComponent());
 	//	mesh->SetCollisionProfileName(TEXT("BlackAll"));
@@ -23,6 +28,9 @@ void AStoneBase::BeginPlay()
 {
 	Super::BeginPlay();
 	mesh->OnComponentHit.AddDynamic(this, &AStoneBase::OnHit);
+
+	HealthComp->OnHealthChanged.AddDynamic(this, &AStoneBase::OnMyHealthChanged);
+
 }
 
 // Called every frame
@@ -55,9 +63,24 @@ void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 			}
 		}
 		else {
-			UMapLauncher::getInstance()->TryCreateStone("", position);
+			
 		}
 		UE_LOG(LogTemp, Log, TEXT("z :%f"), loc.Z);
 	}
 }
 
+void AStoneBase::OnMyHealthChanged(UTPSHealthComponent* MyHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (Health < 1.0f && !bDied)
+	{
+		bDied = true;
+		UMapLauncher::getInstance()->TryCreateStone("", position);
+	}
+}
+
+void AStoneBase::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AStoneBase, bDied);
+}

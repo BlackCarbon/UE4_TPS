@@ -31,13 +31,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FLAG")
 		UStaticMeshComponent* flag;
     
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FLAG")
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadWrite, Category = "FLAG")
 	   int flagteam;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FLAG")
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadWrite, Category = "FLAG")
 		TArray<AController*> flagcontroller;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FLAG")
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadWrite, Category = "FLAG")
 		int flagcolor;
 public:	
 
@@ -58,7 +58,7 @@ public:
 
 	//设置旗子的速度，正为上升，负为下降
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
-	void SetSpeed(int speed);
+	void SetSpeed(float speed);
 
 	//Fire旗子进行移动
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")

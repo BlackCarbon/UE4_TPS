@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "StoneBase.generated.h"
 class UStaticMeshComponent;
+class UTPSHealthComponent;
 
 UCLASS()
 class TPS_API AStoneBase : public AActor
@@ -24,6 +25,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "CreationName")
 		FString ClassName;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		UTPSHealthComponent* HealthComp;
+
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "StoneBase")
+		bool bDied;
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,9 +38,11 @@ protected:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
+	UFUNCTION()
+	void OnMyHealthChanged(UTPSHealthComponent* MyHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 
 };

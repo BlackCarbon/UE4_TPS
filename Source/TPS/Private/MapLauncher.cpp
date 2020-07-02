@@ -3,6 +3,8 @@
 
 #include "MapLauncher.h"
 #include "StoneBase.h"
+#include "MapLauncherLocal.h"
+#include "Net/UnrealNetwork.h"
 
 //#include "MapProductor.h"
 
@@ -138,11 +140,13 @@ bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos)
 
 
 bool UMapLauncher::DispatchCreateMsg(const FString&BP_Name, const FIntVector& pos) {
+
 	//向本地端发送创造实例的消息
+		UMapLauncherLocal launcherloca;
+		launcherloca.ServerCreateStone(BP_Name, pos);
 
-	return false;
+		return false;
 }
-
 
 /*AStoneBase* UMapLauncher::CreateStone(UWorld* world, FString BP_Name, FIntVector pos) {
 	//AStoneBase* x =GetWorld()-> SpawnActor<AStoneBase>(AStoneBase::StaticClass(),UMapLauncher->getInstance()->transFromDispersedToContinuous(pos));

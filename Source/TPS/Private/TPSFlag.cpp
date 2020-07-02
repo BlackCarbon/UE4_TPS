@@ -3,6 +3,7 @@
 
 #include "TPSFlag.h"
 #include "Components/BoxComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ATPSFlag::ATPSFlag()
@@ -32,3 +33,12 @@ int ATPSFlag::getFlagColor()
 	return flagcolor;
 }
 
+
+void ATPSFlag::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATPSFlag, flagteam);
+	DOREPLIFETIME(ATPSFlag, flagcontroller);
+	DOREPLIFETIME(ATPSFlag, flagcolor);
+}

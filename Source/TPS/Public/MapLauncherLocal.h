@@ -20,6 +20,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	TMap<FIntVector, AStoneBase*>StoneMap;
+
 	UFUNCTION()
 	AStoneBase *CreateStone(const FString &BP_Name,const FIntVector &pos);
 
@@ -27,5 +28,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	UFUNCTION(Server, Reliable, WithValidation)
+		void ServerCreateStone(const FString& BP_Name, const FIntVector& pos);
 };
