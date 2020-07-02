@@ -84,25 +84,25 @@ void ATPSCharacter::OnMyHealthChanged(UTPSHealthComponent * MyHealthComp, float 
 				GM->RespawnPlayer(GetController(), 5.0f);
 			}
 		}
-
-		if (HasAuthority())
-		{
-			auto world = GetWorld();
-			if (ensureAlways(world))
-			{
-				auto GM = world->GetAuthGameMode<ATPSTDMGameMode>();
-				auto GS = world->GetGameState<ATPSGameState>();
-				if (ensureAlways(GM) && ensureAlways(GS))
-				{
-					int Team1 = GS->GetTeamStateByController(InstigatedBy);
-					int Team0 = GS->GetTeamStateByActor(this);
-					if (ensure(Team0 != Team1))
-					{
-						GM->AddTeamScore(Team1, 1.0f);
-					}
-				}
-			}
-		}
+// 		不在此处处理
+// 		if (HasAuthority())
+// 		{
+// 			auto world = GetWorld();
+// 			if (ensureAlways(world))
+// 			{
+// 				auto GM = world->GetAuthGameMode<ATPSTDMGameMode>();
+// 				auto GS = world->GetGameState<ATPSGameState>();
+// 				if (ensureAlways(GM) && ensureAlways(GS))
+// 				{
+// 					int Team1 = GS->GetTeamStateByController(InstigatedBy);
+// 					int Team0 = GS->GetTeamStateByActor(this);
+// 					if (ensure(Team0 != Team1))
+// 					{
+// 						GM->AddTeamScore(Team1, 1.0f);
+// 					}
+// 				}
+// 			}
+// 		}
 
 		SetLifeSpan(5.0f);
 

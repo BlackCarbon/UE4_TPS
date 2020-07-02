@@ -7,6 +7,7 @@
 #include "TPSCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "TPSPlayerController.h"
+#include "StoneBase.h"
 // #define  FOX_DEBUG
 
 
@@ -53,6 +54,7 @@ void ATPSTDMGameMode::StartPlay()
 	//准备游戏
 	PreparingForGame();
 
+	OnActorKilled.AddDynamic(this, &ATPSTDMGameMode::HandleOnActorKilled);
 }
 
 
@@ -82,6 +84,49 @@ void ATPSTDMGameMode::RespawnPlayer(AController * Controller, float InTime)
 
 
 
+
+void ATPSTDMGameMode::HandleOnActorKilled(AActor* VictimActor, AActor* KillerActor, AController* KillerController)
+{
+	//摧毁岩石加1分，杀死地方玩家加3分
+	auto world = GetWorld();
+	ATPSTDMGameMode *GM = nullptr;
+	ATPSGameState *GS = nullptr;
+	if (ensureAlways(world))
+	{
+		GM = world->GetAuthGameMode<ATPSTDMGameMode>();
+		GS = world->GetGameState<ATPSGameState>();
+		ensureAlways(GM);
+		ensureAlways(GS);
+	}
+	{
+		auto stone = Cast<AStoneBase>(VictimActor);
+		if (stone && KillerController)
+		{
+			auto PS = KillerController->GetPlayerState<ATPSPlayerState>();
+			if (PS)
+			{
+				PS->IncreaseScore(1.0f);
+			}
+		}
+	}
+	{
+		auto hostilePlayer = Cast<ATPSCharacter>(VictimActor);
+		if (hostilePlayer && KillerController)
+		{
+			auto PS = KillerController->GetPlayerState<ATPSPlayerState>();
+			if (PS)
+			{
+				//个人得分
+				PS->IncreaseScore(3.0f);
+				//团队得分
+				int team = GS->GetTeamStateByController(KillerController);
+				GM->AddTeamScore(team, 1.0f);
+			}
+		}
+
+	}
+
+}
 
 void ATPSTDMGameMode::AssignNewTeamId()
 {
@@ -151,6 +196,8 @@ void ATPSTDMGameMode::StartGame()
 		return;
 	}
 	SetGameStatus(EGameStatus::InGame);
+	ClearScore();
+	KillAllPlayer();
 }
 
 void ATPSTDMGameMode::EndGame()
@@ -188,6 +235,26 @@ void ATPSTDMGameMode::GameOver()
 	// @TODO 所有玩家将不可操控
 }
 
+void ATPSTDMGameMode::KillAllPlayer()
+{
+	if (ensureAlways(GetWorld()))
+	{
+		for (auto It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+		{
+			auto PC = It->Get();
+			if (PC)
+			{
+				auto character = PC->GetCharacter();
+				FDamageEvent t;
+				if (character)
+				{
+					character->TakeDamage(1000.f, t, nullptr, nullptr);
+				}
+			}
+		}
+	}
+}
+
 void ATPSTDMGameMode::ClearScore()
 {
 	auto world = GetWorld();
@@ -201,6 +268,12 @@ void ATPSTDMGameMode::ClearScore()
 				auto PS = PC->GetPlayerState<ATPSPlayerState>();
 				PS->SetScore(0);
 			}
+		}
+		auto GM = world->GetAuthGameMode<ATPSTDMGameMode>();
+		if (ensureAlways(GM))
+		{
+			GM->SetTeamScore(0, 0);
+			GM->SetTeamScore(1, 0);
 		}
 	}
 }
