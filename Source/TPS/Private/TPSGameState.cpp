@@ -89,7 +89,7 @@ void ATPSGameState::AddNewPlayer(AController* player,int playerId)
 
 #endif // FOX_DEBUG
 
-	//如果已经存在，则不重复添加
+	//锟斤拷锟斤拷丫锟斤拷锟斤拷冢锟斤拷锟斤拷馗锟斤拷锟斤拷
 	for (int i = 0; i < playerList.Num(); i++)
 	{
 		if (playerList[i].x == player)

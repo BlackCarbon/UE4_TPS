@@ -57,10 +57,10 @@ public:
 	int BlockSize=4;
 
 	UPROPERTY(EditDefaultsOnly, Category = "地图大小")
-	FIntVector MapSize=FIntVector(8,8,4);
+	FIntVector MapSize=FIntVector(2,2,4);
 		
 	UPROPERTY(EditDefaultsOnly, Category = "物体缩放")
-	FVector StoneScale=FVector(2,2,1);
+	FVector StoneScale=FVector(4,4,1);
 
 	UPROPERTY(EditDefaultsOnly, Category = "间隔空间")
 		int BlockBlank=4;
