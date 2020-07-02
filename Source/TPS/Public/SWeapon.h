@@ -31,8 +31,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 		void Effect();
 
-
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = "Weapon")
 		TSubclassOf<AActor> ProjectileClass;
 
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")

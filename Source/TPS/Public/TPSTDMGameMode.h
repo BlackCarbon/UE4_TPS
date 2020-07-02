@@ -6,7 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "TPSGameState.h"
 #include "TPSTDMGameMode.generated.h"
-
+#define FIRE 0
+#define WATER 1
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilled, AActor*, VictimActor, AActor*, KillerActor, AController*, KillerController);
