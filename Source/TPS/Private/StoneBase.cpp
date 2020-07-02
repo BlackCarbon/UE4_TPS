@@ -6,6 +6,7 @@
 #include "MapLauncher.h"
 #include "Components/TPSHealthComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AStoneBase::AStoneBase()
@@ -13,6 +14,8 @@ AStoneBase::AStoneBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>( TEXT("Static Mesh"));
+
+	RootComponent = mesh;
 
 	bDied = false;
 	HealthComp = CreateDefaultSubobject<UTPSHealthComponent>(TEXT("HealthComp"));
