@@ -146,28 +146,11 @@ void ATPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void ATPSCharacter::Fire()
+FVector ATPSCharacter::GetPawnViewLocation() const
 {
-	//Fire 的实验函数
-	if (ProjectileClass)
-	{
-
-		FVector CameraLocation;
-		FRotator CameraRotation;
-		GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-		FRotator MuzzleRotation = CameraRotation;
-
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Owner = this;
-		SpawnParams.Instigator = this;
-
-
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, CameraRotation, SpawnParams);
-
-	}
+	if (CameraComp)
+		return CameraComp->GetComponentLocation();
+	return Super::GetPawnViewLocation();
 }
 
 void ATPSCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
@@ -176,3 +159,4 @@ void ATPSCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & Out
 
 	DOREPLIFETIME(ATPSCharacter, bDied);
 }
+
