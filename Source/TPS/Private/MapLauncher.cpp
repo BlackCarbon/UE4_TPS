@@ -41,26 +41,32 @@ void UMapLauncher::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 void UMapLauncher::InitializePlayerStart(const vector<vector<int>>&map)
 {
-	/*for (int i = 0;i < BlockSize;i++) {
+	int32 mx = 0;
+	for (int i = 0;i < map.size();i++) {
+		for (int j = 0;j < map[i].size();j++) {
+			mx = max(mx, map[i][j]);
+		}
+	}
+	for (int i = 0;i < BlockSize;i++) {
 		for (int j = 0;j < BlockSize;j++) {
-			AActor* obj = CreateActor("BP_PlayerStart",FIntVector(i,j, map[i][j]+4));
-			APlayerStart* x = Cast<APlayerStart>(obj);
-			x->PlayerStartTag = FName("0");
+			DispatchCreateMsg("BP_PlayerStart_0",FIntVector(i, j, map[i][j] + 4)); //CreateActor("BP_PlayerStart",FIntVector(i,j, map[i][j]+4));
+		//	APlayerStart* x = Cast<APlayerStart>(obj);
+		//	x->PlayerStartTag = FName("0");
 		}
 	}
 	for (int i = 0;i < BlockSize;i++) {
 		for (int j = 0;j < BlockSize;j++) {
 			int32 x = map.size() - 1 - i;
 			int32 y = map[x].size() - 1 - j;
-			APlayerStart* obj =  Cast<APlayerStart>(CreateActor("BP_PlayerStart", FIntVector(x,y, map[x][y] + 4)));
-			obj->PlayerStartTag = FName("1");
+			DispatchCreateMsg("BP_PlayerStart_1", FIntVector(x,y, map[x][y] + 4));
+			
 		}
 	}
 	int32 x = map.size() ;
-	int32 y = map[x].size() ;
-	CreateActor("BP_NEWFlag", FIntVector(x/2, y/2, map[x/2][y/2] + 10));
-	CreateActor("BP_NEWFlag", FIntVector(x / 2,BlockSize, map[x / 2][BlockSize] + 10));
-	CreateActor("BP_NEWFlag", FIntVector(BlockSize, y / 2, map[BlockSize][y / 2] + 10));*/
+	int32 y = map[x/2].size() ;
+	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y/2, mx+ 10));
+	DispatchCreateMsg("BP_NEWFlag", FIntVector(x / 2,BlockSize-1, mx + 10));
+	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y-BlockSize, mx + 10));
 }
 void UMapLauncher::InitializeMap() {
 	vector<vector<int>>map = MapProductor(BlockSize,MapSize).getMap(1349880437);
@@ -172,7 +178,7 @@ bool UMapLauncher::DispatchCreateMsg(const FString&BP_Name, const FIntVector& po
 		return false;
 }
 
-AActor* UMapLauncher::CreateActor(const FString& BP_Name, const FIntVector& pos) {
+/*AActor* UMapLauncher::CreateActor(const FString& BP_Name, const FIntVector& pos) {
 	FString s = "Blueprint'/Game/Blueprints/";
 	s += BP_Name + ".";
 	s += BP_Name + "_C'";
@@ -190,7 +196,7 @@ AActor* UMapLauncher::CreateActor(const FString& BP_Name, const FIntVector& pos)
 		}
 	}
 	return nullptr;
-}
+}*/
 
 /*AStoneBase* UMapLauncher::CreateStone(UWorld* world, FString BP_Name, FIntVector pos) {
 	//AStoneBase* x =GetWorld()-> SpawnActor<AStoneBase>(AStoneBase::StaticClass(),UMapLauncher->getInstance()->transFromDispersedToContinuous(pos));

@@ -16,6 +16,7 @@ AStoneBase::AStoneBase()
 
 	bDied = false;
 	HealthComp = CreateDefaultSubobject<UTPSHealthComponent>(TEXT("HealthComp"));
+
 	//this->SetRootComponent(mesh);
 //	mesh->SetAttachParent(GetRootComponent());
 	//	mesh->SetCollisionProfileName(TEXT("BlackAll"));
@@ -27,6 +28,13 @@ AStoneBase::AStoneBase()
 void AStoneBase::BeginPlay()
 {
 	Super::BeginPlay();
+	FVector scaler = this->GetActorScale3D();
+	FVector ms = UMapLauncher::getInstance()->StoneScale;
+	scaler.X *= ms.X;
+	scaler.Y *= ms.Y;
+	scaler.Z *= ms.Z;
+//	UE_LOG(LogTemp, Log, TEXT("s=%f"), scaler.X);
+	this->SetActorScale3D(scaler);
 	mesh->OnComponentHit.AddDynamic(this, &AStoneBase::OnHit);
 
 	HealthComp->OnHealthChanged.AddDynamic(this, &AStoneBase::OnMyHealthChanged);
