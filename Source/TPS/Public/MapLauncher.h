@@ -77,6 +77,10 @@ protected:
 	
 	void InitializeMap();
 
+	void InitializePlayerStart(const vector<vector<int>>&map);
+
+	AActor* CreateActor(const FString& BP_Name, const FIntVector& pos);
+
 	TMap<FIntVector, FString>StoneMap;
 
 	
