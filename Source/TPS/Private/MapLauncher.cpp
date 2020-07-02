@@ -41,7 +41,7 @@ void UMapLauncher::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 void UMapLauncher::InitializePlayerStart(const vector<vector<int>>&map)
 {
-	for (int i = 0;i < BlockSize;i++) {
+	/*for (int i = 0;i < BlockSize;i++) {
 		for (int j = 0;j < BlockSize;j++) {
 			AActor* obj = CreateActor("BP_PlayerStart",FIntVector(i,j, map[i][j]+4));
 			APlayerStart* x = Cast<APlayerStart>(obj);
@@ -60,7 +60,7 @@ void UMapLauncher::InitializePlayerStart(const vector<vector<int>>&map)
 	int32 y = map[x].size() ;
 	CreateActor("BP_NEWFlag", FIntVector(x/2, y/2, map[x/2][y/2] + 10));
 	CreateActor("BP_NEWFlag", FIntVector(x / 2,BlockSize, map[x / 2][BlockSize] + 10));
-	CreateActor("BP_NEWFlag", FIntVector(BlockSize, y / 2, map[BlockSize][y / 2] + 10));
+	CreateActor("BP_NEWFlag", FIntVector(BlockSize, y / 2, map[BlockSize][y / 2] + 10));*/
 }
 void UMapLauncher::InitializeMap() {
 	vector<vector<int>>map = MapProductor(BlockSize,MapSize).getMap(1349880437);
@@ -116,15 +116,17 @@ FVector UMapLauncher::transFromDispersedToContinuous(FIntVector p) {
 }
 
 bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos) {
-	if ((BP_Name == "BP_Fire" || BP_Name == "BP_Water" || BP_Name == "") == false) {
+	if ((BP_Name == "BP_Fire" || BP_Name == "BP_Water" || BP_Name == ""||BP_Name=="BP_NStoneBase") == false) {
+		UE_LOG(LogTemp, Warning, TEXT("%s"),&BP_Name[0]);
 		UE_LOG(LogTemp, Warning, TEXT("格式错误"));
 		return false;
 	}
 
 	if (BP_Name == "") {
-		if (*StoneMap.Find(pos) == "BP_NStoneName") {
+		if (StoneMap.Find(pos) !=nullptr) {
 			DispatchCreateMsg("", pos);
 			StoneMap.Remove(pos);
+			return true;
 		}
 		else {
 			UE_LOG(LogTemp, Warning, TEXT("删除位置为空"));
@@ -143,18 +145,19 @@ bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos)
 		{
 			if (name != nullptr) {
 
+				StoneMap.Remove(pos);
+				DispatchCreateMsg("", pos);
 				if (BP_Name == "BP_Fire") {
 					StoneMap.Add(TTuple<FIntVector, FString>(pos, "BP_NStoneName"));
 					return DispatchCreateMsg("BP_NStoneName", pos);
 				}
 				else if (BP_Name == "BP_Water") {
-					StoneMap.Remove(pos);
 					return DispatchCreateMsg("BP_Wind", pos);
 					//	StoneMap.Add(TTuple<FIntVector, FString>(pos, "BP_Wind"));
 				}
 			}
 			else {
-				StoneMap.Add(TTuple<FIntVector, FString>(pos, *BP_Name));
+				StoneMap.Add(TTuple<FIntVector, FString>(pos, BP_Name));
 				return DispatchCreateMsg(BP_Name, pos);
 			}
 		}

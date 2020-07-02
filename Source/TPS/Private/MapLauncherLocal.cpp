@@ -62,8 +62,10 @@ AStoneBase *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVec
 		if (pMyActor)
 		{
 			pMyActor->position = pos;
-		//	UE_LOG(LogTemp, Log, TEXT("!!!new obj z :%f"), transFromDispersedToContinuous(pos).Z);
-			StoneMap.Add(TTuple<FIntVector, AStoneBase*>(pos, pMyActor));
+			UE_LOG(LogTemp, Log, TEXT("!!!new obj z :%f"), pos.Z);
+			if (BP_Name == "BP_Fire" || BP_Name == "BP_Water" || BP_Name == "BP_NStoneBase") {
+				StoneMap.Add(TTuple<FIntVector, AStoneBase*>(pos, pMyActor));
+			}
 			return pMyActor;
 		}
 	}
