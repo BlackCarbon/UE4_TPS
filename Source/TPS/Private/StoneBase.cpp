@@ -16,6 +16,8 @@ AStoneBase::AStoneBase()
 
 	bDied = false;
 	HealthComp = CreateDefaultSubobject<UTPSHealthComponent>(TEXT("HealthComp"));
+
+	SetReplicates(true);
 	//this->SetRootComponent(mesh);
 //	mesh->SetAttachParent(GetRootComponent());
 	//	mesh->SetCollisionProfileName(TEXT("BlackAll"));
