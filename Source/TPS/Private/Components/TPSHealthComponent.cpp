@@ -7,8 +7,9 @@
 #include <TPSCharacter.h>
 #include <TPSPlayerState.h>
 #include <TPSGameState.h>
+#include "TPSFlagGameMode.h"
 #define FOX_DEBUG
-#define GAMEMODE_TDM
+// #define GAMEMODE_TDM
 #define GAMEMODE_FLAG
 
 // Sets default values for this component's properties
@@ -101,6 +102,17 @@ void UTPSHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage
 	if (bIsDied)
 	{
 		ATPSTDMGameMode* GM = Cast<ATPSTDMGameMode>(GetWorld()->GetAuthGameMode());
+		if (GM)
+		{
+			GM->OnActorKilled.Broadcast(GetOwner(), DamageCauser, InstigatedBy);
+		}
+	}
+
+#endif
+#ifdef GAMEMODE_FLAG
+	if (bIsDied)
+	{
+		ATPSFlagGameMode* GM = Cast<ATPSFlagGameMode>(GetWorld()->GetAuthGameMode());
 		if (GM)
 		{
 			GM->OnActorKilled.Broadcast(GetOwner(), DamageCauser, InstigatedBy);
