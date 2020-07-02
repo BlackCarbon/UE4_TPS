@@ -79,6 +79,7 @@ protected:
 
 	TMap<FIntVector, FString>StoneMap;
 
+	
 	bool DispatchCreateMsg(const FString &BP_Name,const FIntVector& pos);
 	//AStoneBase *CreateStone(UWorld* world, FString BP_Name, FIntVector pos);
 

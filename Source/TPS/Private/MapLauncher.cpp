@@ -142,8 +142,11 @@ bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos)
 
 bool UMapLauncher::DispatchCreateMsg(const FString&BP_Name, const FIntVector& pos) {
 	//向本地端发送创造实例的消息
+
 	return false;
 }
+
+
 /*AStoneBase* UMapLauncher::CreateStone(UWorld* world, FString BP_Name, FIntVector pos) {
 	//AStoneBase* x =GetWorld()-> SpawnActor<AStoneBase>(AStoneBase::StaticClass(),UMapLauncher->getInstance()->transFromDispersedToContinuous(pos));
 	//return x;

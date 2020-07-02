@@ -14,6 +14,8 @@ ATPSFlag::ATPSFlag()
 
 	flagteam = 0;
 
+	flagcolor = 0;
+
 	flagcontroller.Empty();
 }
 
@@ -24,4 +26,9 @@ void ATPSFlag::BeginPlay()
 	
 }
 
+int ATPSFlag::getFlagColor()
+{
+	SetColor();
+	return flagcolor;
+}
 

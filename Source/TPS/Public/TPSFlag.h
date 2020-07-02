@@ -37,6 +37,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FLAG")
 		TArray<AController*> flagcontroller;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FLAG")
+		int flagcolor;
 public:	
 
 	//查询旗子被占领的状态，1为water， 2为fire ,0为空闲状态
@@ -45,6 +47,14 @@ public:
 	{
 		return flagteam;
 	}
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
+		void SetColor();
+
+	//查询旗子的颜色，0为无，1为fire色，2为water色
+	UFUNCTION()
+		int getFlagColor();
+
 
 	//设置旗子的速度，正为上升，负为下降
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
@@ -58,9 +68,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyFunc")
 	void WaterFlag();
 
+
 	UFUNCTION()
 	TArray<AController*> GetFlagController()
 	{
 		return flagcontroller;
 	}
+
 };
