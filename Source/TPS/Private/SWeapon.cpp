@@ -49,17 +49,21 @@ void ASWeapon::Fire()
 
 	AActor* MyOwner = GetOwner();
 
-	if (MyOwner)
+	if (MyOwner && ProjectileClass)
 	{
 		FVector EyeLocation;
 		FRotator EyeRotation;
+		
 		MyOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+
 		FVector MuzzleLocation = MeshComp->GetSocketLocation(MuzzleSocketName);
 		FRotator MuzzleRotation = MeshComp->GetSocketRotation(MuzzleSocketName);
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		GetWorld()->SpawnActor<AActor>(FireClass, MuzzleLocation, EyeRotation, SpawnParams);
+		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, EyeRotation, SpawnParams);
+/*
+		//Debug
 		Effect();
 		
 		FVector TraceEnd = EyeLocation + (EyeRotation.Vector() * 10000);
@@ -74,7 +78,7 @@ void ASWeapon::Fire()
 		DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::White, false, 1.0f, 0, 1.0f);
 
 		//FVector ShotDirection = EyeRotation.Vector();
-		/*
+		
 			if (ProjectileClass)
 	{
 

@@ -33,7 +33,7 @@ protected:
 
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-		TSubclassOf<AActor> FireClass;
+		TSubclassOf<AActor> ProjectileClass;
 
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 		//TSubclassOf<UDamageType> DamageType;
@@ -43,10 +43,6 @@ protected:
 
 	//销毁自己的事件
 	FTimerHandle DestroySelf;
-
-	// Projectile class to spawn.
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class ATPS_Projectile> ProjectileClass;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
 	FName MuzzleSocketName;
