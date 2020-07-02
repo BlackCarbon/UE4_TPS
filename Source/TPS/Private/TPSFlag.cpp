@@ -13,6 +13,8 @@ ATPSFlag::ATPSFlag()
 	flag = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FLAG"));
 
 	flagteam = 0;
+
+	flagcontroller.Empty();
 }
 
 // Called when the game starts or when spawned

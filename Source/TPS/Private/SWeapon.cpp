@@ -6,6 +6,7 @@
 #include "Particles/ParticleSystem.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "TPSCharacter.h"
 // Sets default values
 ASWeapon::ASWeapon()
 {
@@ -16,6 +17,7 @@ ASWeapon::ASWeapon()
 	RootComponent = MeshComp;
 
 	MuzzleSocketName = "MuzzleSocket";
+
 }
 
 // Called when the game starts or when spawned
@@ -61,6 +63,7 @@ void ASWeapon::Fire()
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Owner = MyOwner;
 		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, EyeRotation, SpawnParams);
 
 		Effect();
