@@ -7,7 +7,7 @@
 #include "TPSCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "TPSPlayerController.h"
-
+// #define  FOX_DEBUG
 
 
 
@@ -87,18 +87,36 @@ void ATPSTDMGameMode::AssignNewTeamId()
 {
 	auto World = GetWorld();
 	auto GS = GetGameState<ATPSGameState>();
+
+#ifdef FOX_DEBUG
+	if (World && GS)
+	{
+		int cnt = 0; 
+		TArray<APlayerController*> t;
+		for (auto It = World->GetPlayerControllerIterator(); It; ++It)
+		{
+			t.AddUnique(It->Get());
+			cnt++;
+		}
+		t.Sort();
+		
+// 		UE_LOG(LogTemp, Log, TEXT("PC cnt is : %d , unique cnt is : %d"), cnt, t.Num());
+	}
+
+
+#endif // FOX_DEBUG
+
+
+
 	if (World && GS)
 	{
 		for (auto It = World->GetPlayerControllerIterator(); It; ++It)
 		{
 			auto PC = It->Get();
-			if (!GS->DoesPlayerAlreadyExist(PC))
+			auto PS = PC->GetPlayerState<ATPSPlayerState>();
+			if (PS)
 			{
-				auto PS = PC->GetPlayerState<ATPSPlayerState>();
-				if (PS)
-				{
-					GS->AddNewPlayer(PC, PS->GetPlayerId());
-				}
+				GS->AddNewPlayer(PC, PS->GetPlayerId());
 			}
 		}
 	}

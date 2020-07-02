@@ -56,10 +56,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		FVector MuzzleOffset;
 
-	// Projectile class to spawn.
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class ATPS_Projectile> ProjectileClass;
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -67,8 +63,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Function that handles firing projectiles.
-	UFUNCTION(BlueprintCallable, Category = "Projectile")
-		void Fire();
+	virtual FVector GetPawnViewLocation() const override;
+
 
 };

@@ -7,6 +7,8 @@
 #include <utility>
 #include <TPSCharacter.h>
 #include "TPSPlayerController.h"
+#include "Blueprint/UserWidget.h"
+// #define FOX_DEBUG
 
 ATPSGameState::ATPSGameState()
 {
@@ -81,11 +83,18 @@ int ATPSGameState::TeamCount(int team)
 
 void ATPSGameState::AddNewPlayer(AController* player,int playerId)
 {
+#ifdef FOX_DEBUG
+	if (playerList.Num() != 3)
+		UE_LOG(LogTemp, Log, TEXT("Now player count is %d"), playerList.Num());
+
+#endif // FOX_DEBUG
+
 	//如果已经存在，则不重复添加
 	for (int i = 0; i < playerList.Num(); i++)
 	{
 		if (playerList[i].x == player)
 		{
+			playerList[i].y = playerId;
 			return;
 		}
 	}
@@ -137,6 +146,8 @@ void ATPSGameState::OnRep_GameStatus(EGameStatus OldStatus)
 {
 	OnGameStatusChanged(GameStatus, OldStatus);
 }
+
+
 
 void ATPSGameState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
