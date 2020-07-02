@@ -36,9 +36,9 @@ void UMapLauncherLocal::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 
 
-AStoneBase *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVector& pos) {
+AActor *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVector& pos) {
 	if (BP_Name == "") {
-		AStoneBase *x = StoneMap.FindRef(pos);
+		AActor*x = StoneMap.FindRef(pos);
 		if(x){
 			x->Destroy();
 			StoneMap.Remove(pos);
@@ -53,17 +53,22 @@ AStoneBase *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVec
 	s += BP_Name + "_C'";
 	//	UE_LOG(LogTemp, Log, TEXT(&s[0]));
 
-	UClass* BlueprintVar = StaticLoadClass(AStoneBase::StaticClass(), nullptr, &s[0]);
+	UClass* BlueprintVar = StaticLoadClass(AActor::StaticClass(), nullptr, &s[0]);
 	if (BlueprintVar != nullptr)
 	{
 		// 向场景中添加新生成的蓝图实例
 
-		AStoneBase* pMyActor =GetWorld()->SpawnActor<AStoneBase>(BlueprintVar,UMapLauncher::getInstance()-> transFromDispersedToContinuous(pos), FRotator::ZeroRotator);
+		AActor* pMyActor =GetWorld()->SpawnActor<AActor>(BlueprintVar,UMapLauncher::getInstance()-> transFromDispersedToContinuous(pos), FRotator::ZeroRotator);
 		if (pMyActor)
 		{
-			pMyActor->position = pos;
-		//	UE_LOG(LogTemp, Log, TEXT("!!!new obj z :%f"), transFromDispersedToContinuous(pos).Z);
-			StoneMap.Add(TTuple<FIntVector, AStoneBase*>(pos, pMyActor));
+			if (Cast<AStoneBase>(pMyActor)) {
+
+				(Cast<AStoneBase>(pMyActor))->position = pos;
+			}
+			UE_LOG(LogTemp, Log, TEXT("!!!new obj z :%f"), pos.Z);
+			if (BP_Name == "BP_Fire" || BP_Name == "BP_Water" || BP_Name == "BP_NStoneBase") {
+				StoneMap.Add(TTuple<FIntVector, AStoneBase*>(pos, Cast<AStoneBase>(pMyActor)));
+			}
 			return pMyActor;
 		}
 	}
@@ -72,7 +77,7 @@ AStoneBase *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVec
 
 void UMapLauncherLocal::ServerCreateStone_Implementation(const FString& BP_Name, const FIntVector& pos)
 {
-	AStoneBase* x = CreateStone(BP_Name, pos);
+	AActor* x = CreateStone(BP_Name, pos);
 }
 
 bool UMapLauncherLocal::ServerCreateStone_Validate(const FString& BP_Name, const FIntVector& pos)
