@@ -62,11 +62,12 @@ void ASWeapon::Fire()
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, EyeRotation, SpawnParams);
-/*
-		//Debug
+
 		Effect();
+
+		//Debug
 		
-		FVector TraceEnd = EyeLocation + (EyeRotation.Vector() * 10000);
+/*		FVector TraceEnd = EyeLocation + (EyeRotation.Vector() * 10000);
 
 		FCollisionQueryParams QueryParames;
 		QueryParames.AddIgnoredActor(MyOwner);
@@ -76,26 +77,6 @@ void ASWeapon::Fire()
 		FHitResult Hit;
 
 		DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::White, false, 1.0f, 0, 1.0f);
-
-		//FVector ShotDirection = EyeRotation.Vector();
-		
-			if (ProjectileClass)
-	{
-
-		FVector CameraLocation;
-		FRotator CameraRotation;
-		GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-		FRotator MuzzleRotation = CameraRotation;
-
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Owner = this;
-		SpawnParams.Instigator = this;
-
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, CameraRotation, SpawnParams);
-		
 			
 		if (GetWorld()->LineTraceSingleByChannel(Hit, EyeLocation, TraceEnd, ECC_Visibility, QueryParames))
 		{
