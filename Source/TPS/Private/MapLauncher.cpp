@@ -6,6 +6,7 @@
 #include <GameFramework/PlayerStart.h>
 #include <GameFramework/PlayerStart.h>
 #include "Net/UnrealNetwork.h"
+#include "MapLauncherLocal.h"
 
 // Sets default values for this component's properties
 UMapLauncher::UMapLauncher()
