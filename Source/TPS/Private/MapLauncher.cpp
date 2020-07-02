@@ -164,9 +164,9 @@ bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos)
 
 bool UMapLauncher::DispatchCreateMsg(const FString&BP_Name, const FIntVector& pos) {
 
-	//向本地端发送创造实例的消息
-		UMapLauncherLocal launcherloca;
-		launcherloca.ServerCreateStone(BP_Name, pos);
+	//向本地端发送创造实例的消
+
+		launcherloca->ServerCreateStone(BP_Name, pos);
 
 		return false;
 }

@@ -15,6 +15,7 @@ using namespace std;
 #include "MapLauncher.generated.h"
 
 class AStoneBase;
+class UMapLauncherLocal;
 
 /*static class PositionTranslator {
 public:
@@ -65,6 +66,8 @@ public:
 		int BlockBlank=0;
 	UFUNCTION()
 	bool TryCreateStone(const FString& BP_Name, const FIntVector& pos);
+
+	UMapLauncherLocal* launcherloca;
 	//UPROPERTY(EditDefaultsOnly, Category = "初始缩放")
 	//static float OriginScale;
 //	PositionTranslator * PosTrans;
