@@ -55,11 +55,5 @@ void ATPS_Projectile::FireInDirection(const FVector& ShootDirection)
 	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
-//ÇòÌåÅö×²º¯Êý
-//void ATPS_Projectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
-//{
-//	if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
-//	{
-//		OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
-//	}
-//}
+
+

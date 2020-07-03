@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class UProjectileMovementComponent;
+class UParticleSystem;
 
 UCLASS()
 class TPS_API ATPS_Projectile : public AActor

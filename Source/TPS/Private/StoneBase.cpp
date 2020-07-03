@@ -57,35 +57,35 @@ void AStoneBase::Tick(float DeltaTime)
 }
 void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) 
 {
-	ATPS_Projectile *other = Cast<ATPS_Projectile>(OtherActor);
-	UE_LOG(LogTemp, Log, TEXT("hit stone"));
-	if(other)
-	{
-		FVector loc = Hit.Location - GetTransform().GetLocation();
-		
-		/*
-		float var = loc.Z / mesh->GetComponentTransform().GetScale3D().Z;
-		if (abs(round(var) - var) < 1e-6) {
-			Destroy();
-		}*/
-		if (loc.Z > 40*stoneScaler.Z) {//打在砖块顶面
-			FIntVector np = position;
-			np.Z += 1;
-			if (other->GetActorLabel().StartsWith("BP_Fire")) {
+	//ATPS_Projectile *other = Cast<ATPS_Projectile>(OtherActor);
+	//UE_LOG(LogTemp, Log, TEXT("hit stone"));
+	//if(other)
+	//{
+	//	FVector loc = Hit.Location - GetTransform().GetLocation();
+	//	
+	//	/*
+	//	float var = loc.Z / mesh->GetComponentTransform().GetScale3D().Z;
+	//	if (abs(round(var) - var) < 1e-6) {
+	//		Destroy();
+	//	}*/
+	//	if (loc.Z > 40*stoneScaler.Z) {//打在砖块顶面
+	//		FIntVector np = position;
+	//		np.Z += 1;
+	//		if (other->GetActorLabel().StartsWith("BP_Fire")) {
 
-				UMapLauncher::getInstance()->TryCreateStone("BP_Fire", np);
-			}
-			else if (other->GetActorLabel().StartsWith("BP_Witer")) {
+	//			UMapLauncher::getInstance()->TryCreateStone("BP_Fire", np);
+	//		}
+	//		else if (other->GetActorLabel().StartsWith("BP_Witer")) {
 
-				UMapLauncher::getInstance()->TryCreateStone("BP_Water", np);
-			}
-		}
-		else {//打在砖块侧面
-			
-			
-		}
-		UE_LOG(LogTemp, Log, TEXT("z :%f"), loc.Z);
-	}
+	//			UMapLauncher::getInstance()->TryCreateStone("BP_Water", np);
+	//		}
+	//	}
+	//	else {//打在砖块侧面
+	//		
+	//		
+	//	}
+	//	UE_LOG(LogTemp, Log, TEXT("z :%f"), loc.Z);
+	//}
 }
 
 void AStoneBase::OnMyHealthChanged(UTPSHealthComponent* MyHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)

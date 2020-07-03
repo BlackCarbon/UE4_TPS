@@ -7,7 +7,7 @@
 #include <utility>
 #include <TPSCharacter.h>
 #include "TPSPlayerController.h"
-#include "Blueprint/UserWidget.h"
+
 // #define FOX_DEBUG
 
 ATPSGameState::ATPSGameState()
