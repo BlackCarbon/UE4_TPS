@@ -45,5 +45,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	FVector stoneScaler = FVector::OneVector;
+
 
 };

@@ -34,6 +34,7 @@ void AStoneBase::BeginPlay()
 	Super::BeginPlay();
 	FVector scaler = this->GetActorScale3D();
 	FVector ms = UMapLauncher::getInstance()->StoneScale;
+	stoneScaler = ms;
 	scaler.X *= ms.X;
 	scaler.Y *= ms.Y;
 	scaler.Z *= ms.Z;
@@ -53,6 +54,7 @@ void AStoneBase::Tick(float DeltaTime)
 }
 void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) {
 	ATPS_Projectile *other = Cast<ATPS_Projectile>(OtherActor);
+	UE_LOG(LogTemp, Log, TEXT("hit stone"));
 	if(other)
 	{
 		FVector loc = Hit.Location - GetTransform().GetLocation();
@@ -62,7 +64,7 @@ void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 		if (abs(round(var) - var) < 1e-6) {
 			Destroy();
 		}*/
-		if (loc.Z > 40) {//打在砖块顶面
+		if (loc.Z > 40*stoneScaler.Z) {//打在砖块顶面
 			FIntVector np = position;
 			np.Z += 1;
 			if (other->GetActorLabel().StartsWith("BP_Fire")) {
