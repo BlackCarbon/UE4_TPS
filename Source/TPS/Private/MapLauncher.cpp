@@ -65,8 +65,8 @@ void UMapLauncher::InitializePlayerStart(const vector<vector<int>>&map)
 	int32 x = map.size() ;
 	int32 y = map[x/2].size() ;
 	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y/2, mx* (BlockBlank + 1) + 10));
-	DispatchCreateMsg("BP_NEWFlag", FIntVector(x / 2,BlockSize-1, mx* (BlockBlank + 1) + 10));
-	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y-BlockSize, mx * (BlockBlank + 1) + 10));
+	DispatchCreateMsg("BP_NEWFlag", FIntVector(x / 2,1, mx* (BlockBlank + 1) + 10));
+	DispatchCreateMsg("BP_NEWFlag", FIntVector(x/2, y-2, mx * (BlockBlank + 1) + 10));
 }
 void UMapLauncher::InitializeMap() {
 	vector<vector<int>>map = MapProductor(BlockSize,MapSize).getMap(1349880437);
