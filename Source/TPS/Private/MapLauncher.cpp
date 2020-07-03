@@ -171,13 +171,9 @@ bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos)
 
 bool UMapLauncher::DispatchCreateMsg(const FString&BP_Name, const FIntVector& pos) 
 {
-	if (GetOwnerRole() == ROLE_Authority)
-	{
+
 		launcherloca->ServerCreateStone(BP_Name, pos);
 		//UE_LOG(LogTemp, Log, TEXT("服务端"));
-		return true;
-	}
-	else
 		launcherloca->LocalCreateStone(BP_Name, pos);
 			return true;
 }

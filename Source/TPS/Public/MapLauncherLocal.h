@@ -32,7 +32,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(Server, Reliable, WithValidation)
+	UFUNCTION(NetMulticast, Reliable, WithValidation)
 		void ServerCreateStone(const FString& BP_Name, const FIntVector& pos);
 
 	void LocalCreateStone(const FString& BP_Name, const FIntVector& pos);

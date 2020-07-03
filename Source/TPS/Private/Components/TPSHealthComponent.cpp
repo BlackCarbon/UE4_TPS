@@ -9,8 +9,8 @@
 #include <TPSGameState.h>
 #include "TPSFlagGameMode.h"
 #define FOX_DEBUG
-// #define GAMEMODE_TDM
-#define GAMEMODE_FLAG
+ #define GAMEMODE_TDM
+//#define GAMEMODE_FLAG
 
 // Sets default values for this component's properties
 UTPSHealthComponent::UTPSHealthComponent()
