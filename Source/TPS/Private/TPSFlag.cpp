@@ -17,6 +17,8 @@ ATPSFlag::ATPSFlag()
 
 	flagcolor = 0;
 
+	RootComponent = flag;
+
 	flagcontroller.Empty();
 }
 

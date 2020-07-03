@@ -5,6 +5,7 @@
 #include "MapLauncher.h"
 #include "StoneBase.h"
 
+
 // Sets default values for this component's properties
 UMapLauncherLocal::UMapLauncherLocal()
 {
@@ -37,9 +38,11 @@ void UMapLauncherLocal::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 
 AActor *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVector& pos) {
-	if (BP_Name == "") {
+	if (BP_Name == "") 
+	{
 		AActor*x = StoneMap.FindRef(pos);
 		if(x){
+			UE_LOG(LogTemp, Log, TEXT("销毁"));
 			x->Destroy();
 			StoneMap.Remove(pos);
 		}
@@ -75,6 +78,16 @@ AActor *UMapLauncherLocal::CreateStone(const FString& BP_Name, const FIntVector&
 	return nullptr;
 }
 
+
+
+
+void UMapLauncherLocal::LocalCreateStone(const FString& BP_Name, const FIntVector& pos)
+{
+	AActor* x = CreateStone(BP_Name, pos);
+}
+
+
+
 void UMapLauncherLocal::ServerCreateStone_Implementation(const FString& BP_Name, const FIntVector& pos)
 {
 	AActor* x = CreateStone(BP_Name, pos);
@@ -84,3 +97,6 @@ bool UMapLauncherLocal::ServerCreateStone_Validate(const FString& BP_Name, const
 {
 	return true;
 }
+
+
+

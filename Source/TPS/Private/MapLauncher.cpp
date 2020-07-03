@@ -5,8 +5,8 @@
 #include "StoneBase.h"
 #include <GameFramework/PlayerStart.h>
 #include <GameFramework/PlayerStart.h>
-#include "Net/UnrealNetwork.h"
 #include "MapLauncherLocal.h"
+
 
 // Sets default values for this component's properties
 UMapLauncher::UMapLauncher()
@@ -75,7 +75,7 @@ void UMapLauncher::InitializeMap() {
 	for (int i = 0;i < map.size();i++) {
 		for (int j = 0;j < map[i].size();j++) {
 			for (int k = 0;k <= map[i][j];k++) {
-				UE_LOG(LogTemp, Log,TEXT( "%d %d %d"), i, j, k);
+				UE_LOG(LogTemp, Log,TEXT( "地图%d %d %d"), i, j, k);
 				
 				TryCreateStone("BP_NStoneBase", FIntVector(i, j, (BlockBlank+1)*k));
 /*				UClass* BlueprintVar = StaticLoadClass(AStoneBase::StaticClass(), nullptr, TEXT("Blueprint'/Game/Blueprints/BP_NStoneBase.BP_NStoneBase_C'"));
@@ -169,17 +169,17 @@ bool UMapLauncher::TryCreateStone(const FString &BP_Name, const FIntVector &pos)
 }
 
 
-bool UMapLauncher::DispatchCreateMsg(const FString&BP_Name, const FIntVector& pos) {
-
-	//向本地端发送创造实例的消
+bool UMapLauncher::DispatchCreateMsg(const FString&BP_Name, const FIntVector& pos) 
+{
 	if (GetOwnerRole() == ROLE_Authority)
 	{
 		launcherloca->ServerCreateStone(BP_Name, pos);
-
-		return false;
+		//UE_LOG(LogTemp, Log, TEXT("服务端"));
+		return true;
 	}
 	else
-		return false;
+		launcherloca->LocalCreateStone(BP_Name, pos);
+			return true;
 }
 
 /*AActor* UMapLauncher::CreateActor(const FString& BP_Name, const FIntVector& pos) {
@@ -243,5 +243,3 @@ void UMapLauncher::CreateStone<T>(FIntVector pos){
 	x->SetActorScale3D(FVector(StoneScale));
 }
 */
-
-

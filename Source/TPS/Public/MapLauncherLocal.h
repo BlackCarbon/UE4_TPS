@@ -20,6 +20,8 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	UPROPERTY()
 	TMap<FIntVector, AStoneBase*>StoneMap;
 
 	UFUNCTION()
@@ -32,4 +34,7 @@ public:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 		void ServerCreateStone(const FString& BP_Name, const FIntVector& pos);
+
+	void LocalCreateStone(const FString& BP_Name, const FIntVector& pos);
+
 };

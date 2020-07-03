@@ -20,7 +20,9 @@ AStoneBase::AStoneBase()
 	bDied = false;
 	HealthComp = CreateDefaultSubobject<UTPSHealthComponent>(TEXT("HealthComp"));
 
-	SetReplicates(true);
+	bReplicates = true;
+	
+	//SetReplicates(true);
 	//this->SetRootComponent(mesh);
 //	mesh->SetAttachParent(GetRootComponent());
 	//	mesh->SetCollisionProfileName(TEXT("BlackAll"));
@@ -40,6 +42,7 @@ void AStoneBase::BeginPlay()
 	scaler.Z *= ms.Z;
 //	UE_LOG(LogTemp, Log, TEXT("s=%f"), scaler.X);
 	this->SetActorScale3D(scaler);
+
 	mesh->OnComponentHit.AddDynamic(this, &AStoneBase::OnHit);
 
 	HealthComp->OnHealthChanged.AddDynamic(this, &AStoneBase::OnMyHealthChanged);
@@ -52,7 +55,8 @@ void AStoneBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) {
+void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) 
+{
 	ATPS_Projectile *other = Cast<ATPS_Projectile>(OtherActor);
 	UE_LOG(LogTemp, Log, TEXT("hit stone"));
 	if(other)
@@ -77,7 +81,7 @@ void AStoneBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 			}
 		}
 		else {//打在砖块侧面
-			UMapLauncher::getInstance()->TryCreateStone("", position);
+			
 			
 		}
 		UE_LOG(LogTemp, Log, TEXT("z :%f"), loc.Z);
