@@ -51,6 +51,7 @@ void ASWeapon::Fire()
 {
 
 	AActor* MyOwner = GetOwner();
+	auto character = Cast<ATPSCharacter>(MyOwner);
 
 	if (MyOwner && ProjectileClass)
 	{
@@ -64,7 +65,8 @@ void ASWeapon::Fire()
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Owner = MyOwner;
+		SpawnParams.Owner = character;
+		SpawnParams.Instigator = character->GetInstigator();
 		
 		if (HasAuthority())
 			GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, EyeRotation, SpawnParams);
