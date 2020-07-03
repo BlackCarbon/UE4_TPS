@@ -100,12 +100,20 @@ public:
 	bool DoesPlayerAlreadyExist(AController *player);
 
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameState")
+		void GetWidget(EGameStatus NewStatus, EGameStatus OldStatus);
+
+
 protected:
 
 	UFUNCTION()
 		void OnRep_GameStatus(EGameStatus OldStatus);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "GameState")
-		void OnGameStatusChanged(EGameStatus NewStatus, EGameStatus OldStatus);
+	UFUNCTION()
+		void OnGameStatusChanged(EGameStatus NewStatus, EGameStatus OldStatus)
+	{
+		GetWidget(NewStatus, OldStatus);
+
+	}
 
 };
